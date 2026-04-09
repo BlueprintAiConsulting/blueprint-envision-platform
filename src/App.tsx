@@ -9,7 +9,7 @@ import { Upload, Layout, Check, Loader2, Image as ImageIcon, Sparkles, ArrowRigh
 import { motion, AnimatePresence } from 'motion/react';
 import { get, set, del } from 'idb-keyval';
 import { TENANT } from './tenant.config';
-import { SIDING_OPTIONS, ALL_SIDING_OPTIONS, VERTICAL_OPTIONS, DEFAULT_SIDING_LINE, DEFAULT_SIDING_COLOR } from './catalogData';
+import { SIDING_OPTIONS, ALL_SIDING_OPTIONS, VERTICAL_OPTIONS, DEFAULT_SIDING_LINE, DEFAULT_SIDING_COLOR, SHUTTER_COLORS, TRIM_COLORS } from './catalogData';
 
 
 
