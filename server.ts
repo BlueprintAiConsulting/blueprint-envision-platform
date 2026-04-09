@@ -30,7 +30,8 @@ const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:3001',
   'http://localhost:3002',
-  'https://blueprint-siding-visualizer.onrender.com'
+  'https://blueprint-siding-visualizer.onrender.com',
+  'https://blueprint-envision-platform.onrender.com'
 ];
 
 app.use(cors({
@@ -551,7 +552,7 @@ app.post('/api/quote-request', standardLimiter, async (req, res) => {
   </div>
   <div style="background:#0F172A;padding:14px 28px;border-radius:0 0 12px 12px;text-align:center;color:#475569;font-size:11px">
     <p style="margin:0">Submitted via BlueprintEnvision &nbsp;·&nbsp; ${timestamp}</p>
-    <p style="margin:4px 0 0">https://blueprint-siding-visualizer.onrender.com</p>
+    <p style="margin:4px 0 0">https://blueprint-envision-platform.onrender.com</p>
   </div>
 </div>
 </body></html>`;
