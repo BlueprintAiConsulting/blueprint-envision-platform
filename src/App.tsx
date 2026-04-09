@@ -51,9 +51,6 @@ interface QuickZone {
   selectedColor: SidingColor;
 }
 
-// Siding catalog data is imported from catalogData.ts
-// All siding options
-const ALL_SIDING_OPTIONS = [...SIDING_OPTIONS, ...VERTICAL_OPTIONS];
 
 const DEFAULT_QUICK_ZONES: QuickZone[] = [
   { id: 'qz-main',     name: 'Main Body',   enabled: true,  selectedLine: DEFAULT_SIDING_LINE, selectedColor: DEFAULT_SIDING_COLOR },
