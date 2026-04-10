@@ -183,12 +183,14 @@ export default function App() {
       try {
         const savedState = await get('blueprint-siding-state');
         if (savedState) {
+          // Validate catalog compatibility — discard stale data from old catalog
+          const knownIds = new Set(ALL_SIDING_OPTIONS.flatMap(l => l.colors.map(c => c.id)));
+          const isValid = savedState.sections?.[0]?.selectedColor?.id ? knownIds.has(savedState.sections[0].selectedColor.id) : false;
+          if (!isValid) { console.warn('[hydrate] Stale catalog — clearing'); await del('blueprint-siding-state'); setIsRestoring(false); return; }
           if (savedState.selectedImage) setSelectedImage(savedState.selectedImage);
           if (savedState.appMode) setAppMode(savedState.appMode);
           if (savedState.sections) setSections(savedState.sections);
           if (savedState.currentSectionId) setCurrentSectionId(savedState.currentSectionId);
-          // NOTE: We intentionally do NOT restore resultImage/quickResult so the canvas
-          // always opens on the clean full-home source photo, not a previous AI generation.
           if (savedState.quickZones) setQuickZones(savedState.quickZones);
           
           if (savedState.sections && savedState.currentSectionId) {
