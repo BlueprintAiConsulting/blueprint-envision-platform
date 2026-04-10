@@ -1,9 +1,14 @@
 /**
  * BlueprintEnvision — Tenant Configuration
+ *
+ * All white-label branding lives here. When onboarding a new contractor,
+ * update these values and re-deploy — no other files need editing.
  */
 export const TENANT = {
   companyName: 'Blueprint AI Consulting',
   appName: 'BlueprintEnvision',
+  /** Display name for the installing contractor shown in UI & emails */
+  installerName: 'Blueprint AI Consulting',
   defaultLeadEmail: 'drewhufnagle@gmail.com',
   sidingTiers: {
     good:   { label: 'Good',   displayName: 'Horizon™',        material: 'Vinyl Siding' },

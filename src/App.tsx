@@ -3062,7 +3062,7 @@ export default function App() {
                 </div>
               </div>
               <p className="text-[#94A3B8] text-sm leading-relaxed max-w-md">
-                your installer Exteriors uses BlueprintEnvision — powered by Blueprint AI — to help homeowners see exactly how new siding, shutters, trim, and accents will look on their home before a single panel is installed.
+                {TENANT.installerName} uses BlueprintEnvision — powered by Blueprint AI — to help homeowners see exactly how new siding, shutters, trim, and accents will look on their home before a single panel is installed.
               </p>
             </div>
             <div>
@@ -3090,7 +3090,7 @@ export default function App() {
               <span className="text-[#475569] font-semibold">DISCLAIMER: </span>
               Visualizations produced by this tool are artificially generated approximations intended solely for illustrative purposes. Actual siding color, texture, profile, and appearance will vary based on product specification, installation conditions, ambient lighting, and other factors. These images do not constitute a warranty, guarantee, or binding representation of any product or outcome.
               {' '}Color availability varies by region and installer. Request physical product samples before making any purchasing decision.
-              {' '}Photos uploaded to this tool are transmitted to Google LLC's Gemini AI service for processing and are not retained, stored, or shared by Blueprint AI or your installer Exteriors beyond the active visualization session.
+              {' '}Photos uploaded to this tool are transmitted to Google LLC's Gemini AI service for processing and are not retained, stored, or shared by Blueprint AI or {TENANT.installerName} beyond the active visualization session.
             </p>
           </div>
 
@@ -3213,7 +3213,7 @@ export default function App() {
               {/* Modal Header */}
               <div className="bg-[#0A0E17] border-b border-[#1E293B] px-6 py-4 flex items-center justify-between shrink-0">
                 <div>
-                  <div className="text-xs font-bold text-[#60A5FA] uppercase tracking-widest">your installer Exteriors</div>
+                  <div className="text-xs font-bold text-[#60A5FA] uppercase tracking-widest">{TENANT.installerName}</div>
                   <div className="text-base font-bold text-[#E2E8F0] mt-0.5">Request a Free Quote</div>
                 </div>
                 <button onClick={() => { if (!quoteSubmitting) setShowQuoteModal(false); }} className="p-2 rounded-full text-[#64748B] hover:text-white hover:bg-[#1E293B] transition-colors">
@@ -3235,7 +3235,7 @@ export default function App() {
                       <Check className="w-10 h-10 text-[#10B981]" />
                     </motion.div>
                     <h3 className="text-xl font-bold text-[#E2E8F0] mb-3">Request Sent!</h3>
-                    <p className="text-[#94A3B8] text-sm leading-relaxed mb-2">The your installer Exteriors team has your request and will reach out within <strong className="text-white">24 business hours</strong>.</p>
+                    <p className="text-[#94A3B8] text-sm leading-relaxed mb-2">The {TENANT.installerName} team has your request and will reach out within <strong className="text-white">24 business hours</strong>.</p>
                     <p className="text-[#64748B] text-xs">Your visualization is downloading now…</p>
                   </motion.div>
                 ) : (
