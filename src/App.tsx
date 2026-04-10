@@ -387,24 +387,8 @@ export default function App() {
   const [maskPast, setMaskPast] = useState<{imageData: ImageData, hasMask: boolean}[]>([]);
   const [maskFuture, setMaskFuture] = useState<{imageData: ImageData, hasMask: boolean}[]>([]);
 
-  useEffect(() => {
-    const loadDefaultImage = async () => {
-      try {
-        const response = await fetch('/default-house.jpg');
-        if (!response.ok) return;
-        const blob = await response.blob();
-        if (blob.type.startsWith('text/')) return; // Ignore index.html fallback
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setSelectedImage(reader.result as string);
-        };
-        reader.readAsDataURL(blob);
-      } catch (err) {
-        console.error("Failed to load default image:", err);
-      }
-    };
-    loadDefaultImage();
-  }, []);
+  // NOTE: Auto-loading default-house.jpg removed for white-label platform.
+  // Users choose from the demo gallery or upload their own image.
 
   // ---------------------------------------------------------------------------
   // Clipboard paste: Cmd+V / Ctrl+V pastes an image directly from clipboard
