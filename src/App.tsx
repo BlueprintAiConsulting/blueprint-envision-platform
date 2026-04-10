@@ -2998,7 +2998,16 @@ export default function App() {
                             { src: '/demo-stucco-med.png',      label: 'Stucco Mediterranean', sub: 'EIFS · arched details' },
                             { src: '/demo-victorian.png',       label: 'Victorian Complex',    sub: 'Multi-zone · ornate' },
                           ].map(({ src, label, sub }) => (
-                            <button key={src} onClick={() => setSelectedImage(src)} className="group text-left focus:outline-none">
+                            <button key={src} onClick={async () => {
+                              try {
+                                const resp = await fetch(src);
+                                if (!resp.ok) return;
+                                const blob = await resp.blob();
+                                const reader = new FileReader();
+                                reader.onloadend = () => setSelectedImage(reader.result as string);
+                                reader.readAsDataURL(blob);
+                              } catch { setSelectedImage(src); }
+                            }} className="group text-left focus:outline-none">
                               <div className="relative overflow-hidden rounded-lg border border-[#334155] group-hover:border-[#0EA5E9]/60 transition-all duration-200 shadow-lg">
                                 <img src={src} alt={label} className="w-full h-20 object-cover group-hover:scale-110 transition-transform duration-500" />
                                 <div className="absolute inset-0 bg-gradient-to-t from-[#060B18]/85 via-[#060B18]/20 to-transparent" />
