@@ -14,6 +14,7 @@ import { fileURLToPath } from 'url';
 import { GoogleGenAI } from '@google/genai';
 import { Resend } from 'resend';
 import cors from 'cors';
+import Stripe from 'stripe';
 
 dotenv.config();
 
@@ -703,6 +704,186 @@ Output a single photorealistic, clean, well-lit home exterior photo preserving t
 // ---------------------------------------------------------------------------
 app.get('/api/ping', (_req, res) => {
   res.json({ status: 'ok', uptime: Math.round(process.uptime()), ts: new Date().toISOString() });
+});
+
+// ---------------------------------------------------------------------------
+// Stripe — Subscription billing for contractor SaaS
+// ---------------------------------------------------------------------------
+const stripe = process.env.STRIPE_SECRET_KEY
+  ? new Stripe(process.env.STRIPE_SECRET_KEY)
+  : null;
+
+if (!stripe) {
+  console.warn('⚠️  STRIPE_SECRET_KEY not set — billing endpoints disabled.');
+}
+
+// Plan definitions — prices are created lazily in Stripe on first checkout
+const PLANS: Record<string, { name: string; price: number; interval: 'month' | 'year'; features: string[] }> = {
+  starter: {
+    name: 'BlueprintEnvision Starter',
+    price: 9900, // $99.00 in cents
+    interval: 'month',
+    features: ['100 AI visualizations/mo', '1 team member', 'Quick Mode', 'Lead capture'],
+  },
+  pro: {
+    name: 'BlueprintEnvision Pro',
+    price: 24900, // $249.00 in cents
+    interval: 'month',
+    features: ['500 AI visualizations/mo', '3 team members', 'Quick + Advanced Mode', 'Custom branding'],
+  },
+};
+
+// Cache Stripe Price IDs so we don't re-create them every checkout
+const stripePriceCache: Record<string, string> = {};
+
+async function getOrCreateStripePrice(planKey: string): Promise<string> {
+  if (!stripe) throw new Error('Stripe not configured');
+  if (stripePriceCache[planKey]) return stripePriceCache[planKey];
+
+  const plan = PLANS[planKey];
+  if (!plan) throw new Error(`Unknown plan: ${planKey}`);
+
+  // Search for existing product by metadata
+  const products = await stripe.products.search({ query: `metadata["plan_key"]:"${planKey}"` });
+  let productId: string;
+
+  if (products.data.length > 0) {
+    productId = products.data[0].id;
+    // Find active price for this product
+    const prices = await stripe.prices.list({ product: productId, active: true, limit: 1 });
+    if (prices.data.length > 0) {
+      stripePriceCache[planKey] = prices.data[0].id;
+      return prices.data[0].id;
+    }
+  } else {
+    // Create product
+    const product = await stripe.products.create({
+      name: plan.name,
+      metadata: { plan_key: planKey },
+    });
+    productId = product.id;
+  }
+
+  // Create price
+  const price = await stripe.prices.create({
+    product: productId,
+    unit_amount: plan.price,
+    currency: 'usd',
+    recurring: { interval: plan.interval },
+  });
+
+  stripePriceCache[planKey] = price.id;
+  console.log(`[stripe] Created price ${price.id} for plan "${planKey}"`);
+  return price.id;
+}
+
+// POST /api/stripe/create-checkout — Creates a Stripe Checkout session
+app.post('/api/stripe/create-checkout', standardLimiter, async (req, res) => {
+  if (!stripe) return res.status(503).json({ error: 'Billing not configured.' });
+
+  const { plan, email } = req.body as { plan: string; email?: string };
+  if (!plan || !PLANS[plan]) return res.status(400).json({ error: 'Invalid plan. Use "starter" or "pro".' });
+
+  try {
+    const priceId = await getOrCreateStripePrice(plan);
+    const baseUrl = process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`;
+
+    const session = await stripe.checkout.sessions.create({
+      mode: 'subscription',
+      payment_method_types: ['card'],
+      line_items: [{ price: priceId, quantity: 1 }],
+      success_url: `${baseUrl}/app?session_id={CHECKOUT_SESSION_ID}&welcome=true`,
+      cancel_url: `${baseUrl}/#pricing`,
+      ...(email ? { customer_email: email } : {}),
+      subscription_data: {
+        trial_period_days: 14,
+        metadata: { plan },
+      },
+      metadata: { plan },
+    });
+
+    console.log(`[stripe] Checkout session created: ${session.id} for plan "${plan}"`);
+    res.json({ url: session.url });
+  } catch (err: any) {
+    console.error('[stripe] Checkout error:', err?.message);
+    res.status(500).json({ error: err?.message || 'Failed to create checkout session.' });
+  }
+});
+
+// POST /api/stripe/webhook — Handles Stripe webhook events
+app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+  if (!stripe) return res.status(503).send('Billing not configured.');
+
+  const sig = req.headers['stripe-signature'] as string;
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+  let event: Stripe.Event;
+  try {
+    if (webhookSecret && sig) {
+      event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
+    } else {
+      // In dev/test without webhook secret, parse directly
+      event = JSON.parse(req.body.toString()) as Stripe.Event;
+    }
+  } catch (err: any) {
+    console.error('[stripe webhook] Signature verification failed:', err?.message);
+    return res.status(400).send(`Webhook Error: ${err?.message}`);
+  }
+
+  switch (event.type) {
+    case 'checkout.session.completed': {
+      const session = event.data.object as Stripe.Checkout.Session;
+      console.log(`[stripe] ✅ New subscription! Customer: ${session.customer_email}, Plan: ${session.metadata?.plan}`);
+      // TODO: Create tenant record in database (Phase 3)
+      break;
+    }
+    case 'customer.subscription.updated': {
+      const sub = event.data.object as Stripe.Subscription;
+      console.log(`[stripe] Subscription updated: ${sub.id}, Status: ${sub.status}`);
+      break;
+    }
+    case 'customer.subscription.deleted': {
+      const sub = event.data.object as Stripe.Subscription;
+      console.log(`[stripe] ❌ Subscription cancelled: ${sub.id}`);
+      break;
+    }
+    default:
+      console.log(`[stripe] Unhandled event: ${event.type}`);
+  }
+
+  res.json({ received: true });
+});
+
+// POST /api/stripe/portal — Redirects to customer billing portal
+app.post('/api/stripe/portal', standardLimiter, async (req, res) => {
+  if (!stripe) return res.status(503).json({ error: 'Billing not configured.' });
+
+  const { customerId } = req.body as { customerId: string };
+  if (!customerId) return res.status(400).json({ error: 'Missing customerId.' });
+
+  try {
+    const baseUrl = process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`;
+    const portalSession = await stripe.billingPortal.sessions.create({
+      customer: customerId,
+      return_url: `${baseUrl}/app`,
+    });
+    res.json({ url: portalSession.url });
+  } catch (err: any) {
+    console.error('[stripe] Portal error:', err?.message);
+    res.status(500).json({ error: err?.message || 'Failed to create portal session.' });
+  }
+});
+
+// GET /api/stripe/plans — Public endpoint returning available plans
+app.get('/api/stripe/plans', (_req, res) => {
+  const plans = Object.entries(PLANS).map(([key, plan]) => ({
+    key,
+    name: plan.name,
+    price: plan.price / 100,
+    interval: plan.interval,
+    features: plan.features,
+  }));
+  res.json({ plans });
 });
 
 // ---------------------------------------------------------------------------

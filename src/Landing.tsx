@@ -118,6 +118,32 @@ export default function Landing() {
   const navigate = useNavigate();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
+
+  const handleCheckout = async (planKey: string) => {
+    if (planKey === 'enterprise') {
+      window.location.href = 'mailto:drewhufnagle@gmail.com?subject=BlueprintEnvision%20Enterprise%20Inquiry';
+      return;
+    }
+    setCheckoutLoading(planKey);
+    try {
+      const res = await fetch('/api/stripe/create-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan: planKey }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert(data.error || 'Failed to start checkout.');
+      }
+    } catch {
+      alert('Network error. Please try again.');
+    } finally {
+      setCheckoutLoading(null);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#060B18] text-white overflow-x-hidden">
@@ -419,13 +445,17 @@ export default function Landing() {
                   ))}
                 </ul>
                 <button
+                  onClick={() => handleCheckout(i === 0 ? 'starter' : i === 1 ? 'pro' : 'enterprise')}
+                  disabled={checkoutLoading !== null}
                   className={`w-full py-3 rounded-xl font-bold text-sm transition-all ${
                     plan.popular
                       ? 'bg-[#3B82F6] hover:bg-[#2563EB] text-white shadow-[0_0_20px_rgba(59,130,246,0.3)]'
                       : 'bg-[#1E293B] hover:bg-[#334155] text-white border border-[#334155]'
-                  }`}
+                  } ${checkoutLoading ? 'opacity-60 cursor-wait' : ''}`}
                 >
-                  {plan.cta}
+                  {checkoutLoading === (i === 0 ? 'starter' : i === 1 ? 'pro' : 'enterprise')
+                    ? 'Redirecting to checkout...'
+                    : plan.cta}
                 </button>
               </motion.div>
             ))}
