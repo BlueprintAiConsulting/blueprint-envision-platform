@@ -75,6 +75,18 @@
       let i = 0;
       const el = document.getElementById('splash-status');
       const iv = setInterval(() => { i++; if(i < msgs.length && el) el.textContent = msgs[i]; else clearInterval(iv); }, 1200);
+      // Auto-dismiss splash once React mounts (covers both landing and app routes)
+      const splashObs = new MutationObserver(() => {
+        const root = document.getElementById('root');
+        if (root && root.children.length > 0) {
+          clearInterval(iv);
+          const splash = document.getElementById('splash-screen');
+          if (splash) splash.classList.add('hidden');
+          setTimeout(() => { if (splash) splash.remove(); }, 700);
+          splashObs.disconnect();
+        }
+      });
+      splashObs.observe(document.getElementById('root') || document.body, { childList: true, subtree: true });
     </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
