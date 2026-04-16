@@ -24,7 +24,7 @@ const PLANS = [
       'Email notifications',
       'BlueprintEnvision branding',
     ],
-    cta: 'Start Free Trial',
+    cta: 'Get Started',
     popular: false,
   },
   {
@@ -41,7 +41,7 @@ const PLANS = [
       'Priority AI processing',
       'PDF export with your logo',
     ],
-    cta: 'Start Free Trial',
+    cta: 'Get Started',
     popular: true,
   },
   {
@@ -108,7 +108,7 @@ const FAQS = [
   { q: 'Can I use my own branding?', a: 'Yes! Pro and Enterprise plans let you add your company name, logo, colors, and even your own domain. It looks like your own custom-built tool.' },
   { q: 'What siding brands/colors are included?', a: 'BlueprintEnvision includes a generic catalog of 150+ colors across 4 product tiers. Enterprise customers can integrate their preferred manufacturer\'s catalog with exact color matches.' },
   { q: 'How do leads get delivered?', a: 'Instantly via email. Each lead includes the homeowner\'s contact info, property address, and their exact design specification (colors, product lines, zone assignments).' },
-  { q: 'Is there a free trial?', a: 'Yes — all plans include a 14-day free trial with full access. No credit card required to start.' },
+  { q: 'How do I get started?', a: 'Pick a plan, enter your payment info, and you\'re up and running in under 5 minutes. Cancel anytime from your billing dashboard.' },
 ];
 
 /* ─────────────────────────────────────────────────────────────── */
@@ -173,7 +173,7 @@ export default function Landing() {
               onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
               className="bg-[#3B82F6] hover:bg-[#2563EB] text-white px-5 py-2 rounded-lg text-sm font-bold transition-colors"
             >
-              Start Free Trial
+              Get Started
             </button>
           </div>
           <button className="md:hidden text-[#94A3B8]" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
@@ -188,7 +188,7 @@ export default function Landing() {
             <a href="#pricing" className="block text-sm text-[#94A3B8]" onClick={() => setMobileMenuOpen(false)}>Pricing</a>
             <a href="#faq" className="block text-sm text-[#94A3B8]" onClick={() => setMobileMenuOpen(false)}>FAQ</a>
             <button onClick={() => navigate('/app')} className="block text-sm text-[#94A3B8]">Live Demo</button>
-            <button className="w-full bg-[#3B82F6] text-white py-2 rounded-lg text-sm font-bold">Start Free Trial</button>
+            <button className="w-full bg-[#3B82F6] text-white py-2 rounded-lg text-sm font-bold">Get Started</button>
           </div>
         )}
       </nav>
@@ -243,7 +243,7 @@ export default function Landing() {
               onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
               className="bg-[#3B82F6] hover:bg-[#2563EB] text-white px-8 py-3.5 rounded-xl text-base font-bold transition-all shadow-[0_0_24px_rgba(59,130,246,0.4)] hover:shadow-[0_0_32px_rgba(59,130,246,0.6)] flex items-center gap-2"
             >
-              Start Your 14-Day Free Trial <ArrowRight className="w-4 h-4" />
+              Get Started <ArrowRight className="w-4 h-4" />
             </button>
             <button
               onClick={() => navigate('/app')}
@@ -399,7 +399,7 @@ export default function Landing() {
               Simple, Transparent Pricing
             </h2>
             <p className="text-[#94A3B8] text-lg">
-              14-day free trial on all plans. No credit card required.
+              Choose the plan that fits your business.
             </p>
           </div>
 
@@ -504,14 +504,14 @@ export default function Landing() {
             Ready to Close More <span className="text-[#3B82F6]">Siding Jobs</span>?
           </h2>
           <p className="text-[#94A3B8] text-lg mb-8 max-w-xl mx-auto">
-            Start your 14-day free trial today. No credit card required. Set up in 5 minutes.
+            Start closing more siding jobs today. Set up in 5 minutes.
           </p>
           <button
             onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
             className="bg-[#3B82F6] hover:bg-[#2563EB] text-white px-10 py-4 rounded-xl text-lg font-bold transition-all shadow-[0_0_32px_rgba(59,130,246,0.4)] hover:shadow-[0_0_48px_rgba(59,130,246,0.6)] inline-flex items-center gap-3"
           >
             <Sparkles className="w-5 h-5" />
-            Start Free Trial
+            Get Started
           </button>
         </div>
       </section>

@@ -796,7 +796,6 @@ app.post('/api/stripe/create-checkout', standardLimiter, async (req, res) => {
       cancel_url: `${baseUrl}/#pricing`,
       ...(email ? { customer_email: email } : {}),
       subscription_data: {
-        trial_period_days: 14,
         metadata: { plan },
       },
       metadata: { plan },
