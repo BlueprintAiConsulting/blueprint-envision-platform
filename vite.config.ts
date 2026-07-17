@@ -3,25 +3,23 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import {defineConfig} from 'vite';
 
-export default defineConfig(() => {
+export default defineConfig(({ command }) => {
+  const isProd = command === 'build';
+
   return {
+    // Only use the subpath base for production (GitHub Pages).
+    // In dev, serve from root so URLs are just localhost:5173/
+    base: isProd ? './' : '/',
     plugins: [react(), tailwindcss()],
-    // API key is NOT injected into the client bundle.
-    // All Gemini calls are proxied through the backend server (server.ts).
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
       },
     },
     server: {
-      hmr: process.env.DISABLE_HMR !== 'true',
-      proxy: {
-        // Forward all /api/* requests to the Express backend in dev
-        '/api': {
-          target: 'http://localhost:3002',
-          changeOrigin: true,
-        },
-      },
+      port: 5173,
+      strictPort: false,
+      host: '0.0.0.0',
     },
   };
 });

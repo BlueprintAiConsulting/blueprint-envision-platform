@@ -1,1 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
+
+/* ────── Base Overrides ────── */
+html {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: #0A0E17;
+  background-image: radial-gradient(#1E293B 1px, transparent 1px);
+  background-size: 24px 24px;
+  color: #E2E8F0;
+  overflow-x: hidden;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(59,130,246,0.5); }
+  50% { box-shadow: 0 0 40px rgba(59,130,246,0.9); }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Prevent horizontal overflow on all containers */
+*, *::before, *::after {
+  min-width: 0;
+}
+
+/* ────── Scrollbar styling ────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #1E293B; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #334155; }
+
+/* ────── Selection ────── */
+::selection {
+  background: rgba(0, 229, 255, 0.25);
+  color: #fff;
+}
+
+/* ────── Select dropdown dark ────── */
+select option {
+  background: #0F172A;
+  color: #E2E8F0;
+}
+
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ────── Mobile optimizations ────── */
+@media (max-width: 640px) {
+  /* Prevent iOS double-tap zoom on buttons */
+  button, a, [role="button"] {
+    touch-action: manipulation;
+  }
+
+  /* Remove tap highlight on mobile */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Tighter spacing on mobile */
+  main {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+}
+
+/* ────── Touch-friendly slider ────── */
+.cursor-ew-resize {
+  touch-action: none;
+}
