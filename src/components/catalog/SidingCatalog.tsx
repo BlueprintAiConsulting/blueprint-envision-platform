@@ -29,19 +29,9 @@ const SidingCatalog: React.FC<SidingCatalogProps> = ({
   const garageZone = quickZones.find(z => z.id === 'qz-garage');
 
   return (
-    <div className="space-y-4">
-      {/* 02 SIDING — applied to all exterior walls & gables */}
-      <div className="bg-[#111827] rounded-xl border border-[#1E293B] p-5 shadow-lg">
-        <div className="flex items-center gap-2 mb-4">
-          <div className="w-6 h-6 bg-[#1E3A8A] text-[#60A5FA] rounded flex items-center justify-center text-xs font-bold">02</div>
-          <div>
-            <h2 className="text-sm font-bold uppercase tracking-wider text-[#94A3B8]">Siding</h2>
-            <p className="text-[10px] text-[#64748B]">Applied to all exterior walls &amp; gables</p>
-          </div>
-        </div>
-
-        {/* 4-column style picker matching Wheeler Contracting */}
-        <div className="grid grid-cols-4 gap-1 bg-[#060B18] p-1 rounded-lg mb-3">
+    <div className="bg-[#111827] p-4 space-y-4">
+      {/* 4-column style picker matching Wheeler Contracting */}
+      <div className="grid grid-cols-4 gap-1 bg-[#060B18] p-1 rounded-lg mb-3">
           {ALL_SIDING_OPTIONS.map(line => (
             <button 
               key={line.tier}
@@ -238,17 +228,12 @@ const SidingCatalog: React.FC<SidingCatalogProps> = ({
             )}
           </div>
         )}
-      </div>
 
-
-      {/* 03 ACCENTS — Shutters & Trim with dedicated standard palettes */}
-      <div className="bg-[#111827] rounded-xl border border-[#1E293B] p-5 shadow-lg">
-        <div className="flex items-center gap-2 mb-4">
-          <div className="w-6 h-6 bg-[#1E3A8A] text-[#60A5FA] rounded flex items-center justify-center text-xs font-bold">03</div>
-          <div>
-            <h2 className="text-sm font-bold uppercase tracking-wider text-[#94A3B8]">Accents</h2>
-            <p className="text-[10px] text-[#64748B]">Shutters & trim — standard paint colors</p>
-          </div>
+      {/* Accents — Shutters & Trim with dedicated standard palettes */}
+      <div className="pt-3 border-t border-[#1E293B]">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="text-xs font-bold text-[#E2E8F0]">Accents (Shutters &amp; Trim)</span>
+          <span className="text-[9px] text-[#475569] ml-auto">standard paint colors</span>
         </div>
         <div className="space-y-2">
           {quickZones.filter(z => ['qz-shutters', 'qz-trim'].includes(z.id)).map((zone) => {
