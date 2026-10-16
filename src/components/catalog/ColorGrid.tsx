@@ -1,5 +1,6 @@
 import React from 'react';
 import { SidingColor, RoofingColor } from '../../types';
+import { getTextureOverlayCSS } from '../../utils/textures';
 
 interface ColorGridProps {
   colors: (SidingColor | RoofingColor)[];
@@ -8,6 +9,7 @@ interface ColorGridProps {
   onMouseEnter?: (color: SidingColor | RoofingColor) => void;
   onMouseLeave?: () => void;
   textureImage?: string;
+  textureStyle?: string;
   isExpanded: boolean;
   onToggleExpand?: () => void;
   ringColor?: string;
@@ -23,6 +25,8 @@ const ColorGrid: React.FC<ColorGridProps> = ({
   onMouseLeave,
   isExpanded,
   onToggleExpand,
+  textureImage,
+  textureStyle,
   ringColor = '#3B82F6',
   showMoreLabel = 'Show all colors',
   showFewerLabel = 'Show fewer',
@@ -30,6 +34,13 @@ const ColorGrid: React.FC<ColorGridProps> = ({
   const PREVIEW_COUNT = 12;
   const selectedColor = colors.find(c => c.id === selectedColorId);
   const visibleColors = isExpanded ? colors : colors.slice(0, PREVIEW_COUNT);
+
+  // Pre-compute the texture overlay background-image (same for every swatch in this grid).
+  // Real raster texture photos from CertainTeed lines take priority; SVG engine is the fallback.
+  const resolvedImage = textureImage
+    ? `${import.meta.env.BASE_URL}${textureImage.replace(/^\//, '')}`
+    : undefined;
+  const textureBg = resolvedImage ? `url(${resolvedImage})` : getTextureOverlayCSS(textureStyle);
 
   return (
     <div className="space-y-3">
@@ -42,6 +53,17 @@ const ColorGrid: React.FC<ColorGridProps> = ({
           >
             {'swatchImage' in selectedColor && (selectedColor as any).swatchImage && (
               <img src={(selectedColor as any).swatchImage} alt="" className="absolute inset-0 w-full h-full object-cover" />
+            )}
+            {textureBg && !('swatchImage' in selectedColor && (selectedColor as any).swatchImage) && (
+              <div
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  backgroundImage: textureBg,
+                  backgroundSize: textureImage ? 'cover' : '80px 40px',
+                  mixBlendMode: 'multiply',
+                  opacity: 0.58,
+                }}
+              />
             )}
           </div>
           <div className="min-w-0 flex-1">
@@ -88,8 +110,20 @@ const ColorGrid: React.FC<ColorGridProps> = ({
                     className="absolute inset-0 w-full h-full object-cover"
                   />
                 )}
+                {/* Material texture overlay (multiply blends with the hex color) */}
+                {textureBg && !hasSwatchImg && (
+                  <div
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                      backgroundImage: textureBg,
+                      backgroundSize: textureImage ? 'cover' : '80px 40px',
+                      mixBlendMode: 'multiply',
+                      opacity: 0.58,
+                    }}
+                  />
+                )}
                 {/* Hover shine */}
-                <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-colors duration-150 rounded-lg" />
+                <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-colors duration-150 rounded-lg pointer-events-none" />
               </div>
 
               {/* Label */}

@@ -193,6 +193,8 @@ export const TRIM_COLORS: SidingColor[] = [
 ];
 
 export const ALL_SIDING_OPTIONS = [...CERTAINTEED_OPTIONS, ...VERTICAL_SIDING_OPTIONS];
+export const SIDING_OPTIONS = ALL_SIDING_OPTIONS;
+
 
 export const ROOFING_OPTIONS: RoofingLine[] = [
   { tier: 'HDZ', line: 'Timberline HDZ®', materialType: 'Architectural Shingles', profileLabel: 'Lifetime Laminate — LayerLock™ Technology', textureImage: '/textures/roof-architectural.png', description: 'America\'s #1-selling shingle — 14 standard colors.',
