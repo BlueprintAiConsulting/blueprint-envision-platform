@@ -78,7 +78,7 @@ const SourceAsset: React.FC<SourceAssetProps> = ({
             <div className="flex flex-col items-center justify-center py-8 gap-3">
               <Loader2 className="w-8 h-8 text-[#60A5FA] animate-spin" />
               <p className="font-bold text-sm text-[#E2E8F0]">Calibrating Camera Photo…</p>
-              <p className="text-[10px] text-[#64748B]">Auto-orienting &amp; optimizing for fast mobile rendering</p>
+              <p className="text-[10px] text-[#94A3B8]">Auto-orienting &amp; optimizing for fast mobile rendering</p>
             </div>
           ) : selectedImage ? (
             <div className="w-full">
@@ -117,13 +117,13 @@ const SourceAsset: React.FC<SourceAssetProps> = ({
                 </button>
               </div>
 
-              <p className="text-[10px] text-[#64748B] mt-2 text-center font-medium hidden sm:block">Hover to replace · click camera to shoot live</p>
+              <p className="text-[10px] text-[#94A3B8] mt-2 text-center font-medium hidden sm:block">Hover to replace · click camera to shoot live</p>
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center">
               <Upload className="w-8 h-8 text-[#3B82F6] mb-3 opacity-80" />
               <p className="font-bold text-sm text-[#E2E8F0] text-center">Upload or Take a Photo</p>
-              <p className="text-[10px] text-[#64748B] mt-1 text-center">JPG · PNG · WebP — auto-optimized for mobile</p>
+              <p className="text-[10px] text-[#94A3B8] mt-1 text-center">JPG · PNG · WebP — auto-optimized for mobile</p>
 
               {/* CTA buttons — camera + gallery, optimized for mobile touch */}
               <div className="mt-4 flex gap-2.5 w-full max-w-xs">
@@ -138,14 +138,14 @@ const SourceAsset: React.FC<SourceAssetProps> = ({
                   onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
                   className="flex-1 min-h-[52px] flex flex-col items-center justify-center gap-1.5 py-3 rounded-xl bg-[#111827] hover:bg-[#1E293B] active:scale-[0.96] border border-[#334155] hover:border-[#3B82F6]/40 transition-all touch-manipulation cursor-pointer"
                 >
-                  <Upload className="w-5 h-5 text-[#64748B]" />
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#64748B]">Gallery</span>
+                  <Upload className="w-5 h-5 text-[#94A3B8]" />
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#94A3B8]">Gallery</span>
                 </button>
               </div>
 
               <div className="mt-3 hidden sm:flex items-center gap-1.5">
                 <kbd className="px-1.5 py-0.5 bg-[#1E293B] border border-[#334155] rounded text-[9px] font-mono font-bold text-[#94A3B8] shadow-sm">⌘V</kbd>
-                <span className="text-[9px] text-[#475569] font-medium">to paste a screenshot</span>
+                <span className="text-[9px] text-[#94A3B8] font-medium">to paste a screenshot</span>
               </div>
             </div>
           )}
@@ -158,7 +158,7 @@ const SourceAsset: React.FC<SourceAssetProps> = ({
               {selectedImage ? 'Switch Home Style' : 'Select Your Home Style'}
             </h3>
             {!selectedImage && (
-              <p className="text-[10px] text-[#64748B] mt-1">Choose a home that looks like yours — or upload your own photo</p>
+              <p className="text-[10px] text-[#94A3B8] mt-1">Choose a home that looks like yours — or upload your own photo</p>
             )}
           </div>
           <div className={`grid gap-2 ${selectedImage ? 'grid-cols-3 sm:grid-cols-6' : 'grid-cols-2 sm:grid-cols-3 gap-2.5'}`}>

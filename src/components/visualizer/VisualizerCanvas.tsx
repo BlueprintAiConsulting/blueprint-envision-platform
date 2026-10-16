@@ -143,7 +143,7 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
     window.addEventListener('mouseup', onUp);
   }, [updateSlider]);
 
-  // Touch-based slider drag (mobile) — passive-safe
+  // Touch-based slider drag (mobile) — passive-safe & rAF throttled via updateSlider
   const handleSliderTouchStart = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     updateSlider(e.touches[0].clientX, rect);
@@ -219,13 +219,29 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
                   <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 pointer-events-none z-10">
                     <div className="w-20 h-12 rounded-lg shadow-2xl border border-white/20 overflow-hidden relative" style={{ backgroundColor: swatchPreviewHex }}>
                       {swatchPreviewImage && (
-                        <img src={swatchPreviewImage} alt="" className="absolute inset-0 w-full h-full object-cover" />
+                        <div
+                          className="absolute inset-0 pointer-events-none"
+                          style={{
+                            backgroundImage: `url(${swatchPreviewImage})`,
+                            backgroundSize: 'cover',
+                            mixBlendMode: swatchPreviewImage.includes('/textures/roofing/') ? 'normal' : 'multiply',
+                            opacity: swatchPreviewImage.includes('/textures/roofing/') ? 1 : 0.65,
+                          }}
+                        />
                       )}
                     </div>
                     <div className="flex items-center gap-2 bg-[#0F172A]/90 backdrop-blur-md border border-[#334155] rounded-full px-3 py-1.5 shadow-xl">
                       <div className="w-2.5 h-2.5 rounded-full border border-white/20 shrink-0 overflow-hidden relative" style={{ backgroundColor: swatchPreviewHex }}>
                         {swatchPreviewImage && (
-                          <img src={swatchPreviewImage} alt="" className="absolute inset-0 w-full h-full object-cover" />
+                          <div
+                            className="absolute inset-0 pointer-events-none"
+                            style={{
+                              backgroundImage: `url(${swatchPreviewImage})`,
+                              backgroundSize: 'cover',
+                              mixBlendMode: swatchPreviewImage.includes('/textures/roofing/') ? 'normal' : 'multiply',
+                              opacity: swatchPreviewImage.includes('/textures/roofing/') ? 1 : 0.65,
+                            }}
+                          />
                         )}
                       </div>
                       <span className="text-[10px] font-bold text-[#E2E8F0] uppercase tracking-wider whitespace-nowrap">{swatchPreviewName}</span>
@@ -249,7 +265,7 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
           <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center text-center p-12">
             <div className="w-24 h-24 bg-[#0F172A] rounded-2xl border border-[#1E293B] flex items-center justify-center mb-8 shadow-inner rotate-3"><ImageIcon className="w-10 h-10 text-[#334155]" /></div>
             <h4 className="text-sm font-bold uppercase tracking-[0.2em] mb-3 text-[#E2E8F0]">No Asset Detected</h4>
-            <p className="text-[#64748B] text-xs font-medium max-w-xs leading-relaxed mb-6">Please upload a site photograph to begin.</p>
+            <p className="text-[#94A3B8] text-xs font-medium max-w-xs leading-relaxed mb-6">Please upload a site photograph to begin.</p>
           </motion.div>
         )}
       </AnimatePresence>

@@ -95,6 +95,7 @@ const App: React.FC = () => {
   // --- REFS ---
   const fileInputRef = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasContainerRef = useRef<HTMLDivElement>(null);
 
   // --- HOOKS ---
   const zoomPan = useZoomPan();
@@ -190,6 +191,7 @@ const App: React.FC = () => {
 
   const handleGenerate = async () => {
     if (!selectedImage) return;
+    canvasContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     
     if (appMode === 'quick') {
       ai.setIsQuickGenerating(true);
@@ -306,7 +308,7 @@ const App: React.FC = () => {
         isQuoteAvailable={!!(quickResult || resultImage)}
       />
 
-      <main className="max-w-[1600px] mx-auto px-4 sm:px-6 py-4 sm:py-6">
+      <main className={`max-w-[1600px] mx-auto px-4 sm:px-6 py-4 sm:py-6 ${selectedImage ? 'pb-28 lg:pb-6' : ''}`}>
         <div className="flex flex-col-reverse lg:grid lg:grid-cols-12 gap-4 sm:gap-6">
           <div className="lg:col-span-4 space-y-3 lg:space-y-6">
             {/* Mode Toggles — only shown when Advanced Mode is enabled */}
@@ -503,8 +505,13 @@ const App: React.FC = () => {
             </div>
           </div>
 
-          <div className="lg:col-span-8 lg:sticky lg:top-4 self-start">
-            <div className="bg-[#0A0E17]/80 backdrop-blur-xl rounded-xl border border-[#1E293B] p-1 flex flex-col shadow-2xl overflow-hidden" style={{ height: 'min(calc(100vh - 100px), 900px)', minHeight: '260px' }}>
+          <div 
+            ref={canvasContainerRef}
+            className={`lg:col-span-8 lg:sticky lg:top-4 self-start ${!selectedImage ? 'hidden lg:block' : 'block'}`}
+          >
+            <div 
+              className="bg-[#0A0E17]/80 backdrop-blur-xl rounded-xl border border-[#1E293B] p-1 flex flex-col shadow-2xl overflow-hidden h-[52vh] sm:h-[60vh] lg:h-[min(calc(100vh-100px),900px)] min-h-[280px]"
+            >
               <div className="bg-[#0F172A]/90 border-b border-[#1E293B] px-4 py-3 flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" /><span className="text-[10px] font-bold text-[#94A3B8] uppercase tracking-widest">Engine Active</span></div>
@@ -549,6 +556,47 @@ const App: React.FC = () => {
           </div>
         </div>
       </main>
+
+      {/* Mobile Sticky Floating Action Bar — visible when image is loaded */}
+      {selectedImage && (
+        <div 
+          className="lg:hidden fixed bottom-0 inset-x-0 bg-[#0B131E]/95 backdrop-blur-xl border-t border-[#1E293B] px-4 py-3 z-30 shadow-[0_-8px_30px_rgba(0,0,0,0.8)] flex items-center gap-2"
+          style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}
+        >
+          {(quickResult || resultImage) && (
+            <button 
+              onClick={() => { 
+                setQuickResult(null); 
+                setResultImage(null); 
+                canvasContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }} 
+              className="min-h-[48px] px-3.5 rounded-xl font-bold text-[#94A3B8] bg-[#1E293B] hover:bg-[#334155] active:scale-[0.97] transition-all text-[11px] tracking-wider uppercase border border-[#334155] flex items-center justify-center gap-1.5 shrink-0 touch-manipulation"
+            >
+              <Pencil className="w-3.5 h-3.5" /> Back
+            </button>
+          )}
+          <button 
+            disabled={ai.isQuickGenerating || ai.isProcessing} 
+            onClick={() => {
+              canvasContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              handleGenerate();
+            }}
+            className={`flex-1 min-h-[48px] px-4 rounded-xl font-extrabold text-white shadow-lg flex items-center justify-center gap-2 transition-all uppercase tracking-wider text-[11px] active:scale-[0.97] touch-manipulation ${
+              ai.isQuickGenerating || ai.isProcessing 
+                ? 'bg-[#1E293B] text-[#64748B] cursor-not-allowed border border-[#334155]' 
+                : (quickResult || resultImage) 
+                  ? 'bg-[#1D4ED8] hover:bg-[#1E3A8A] text-white shadow-[0_0_20px_rgba(59,130,246,0.6)]' 
+                  : 'bg-[#3B82F6] hover:bg-[#2563EB] text-white shadow-[0_0_20px_rgba(59,130,246,0.6)] animate-pulse-glow'
+            }`}
+          >
+            {ai.isQuickGenerating || ai.isProcessing 
+              ? <><Loader2 className="w-4 h-4 animate-spin" /> Rendering Roof...</>
+              : (quickResult || resultImage) 
+                ? <><Sparkles className="w-4 h-4" /> Re-Generate</> 
+                : <><Sparkles className="w-4 h-4" /> Visualize New Roof</>}
+          </button>
+        </div>
+      )}
 
       <Footer onShowToS={() => setShowTermsModal(true)} onShowPrivacy={() => setShowPrivacyModal(true)} />
       <QuoteModal 

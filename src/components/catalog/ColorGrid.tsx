@@ -129,7 +129,7 @@ const ColorGrid: React.FC<ColorGridProps> = ({
               {/* Label */}
               <p
                 className="w-full text-center text-[9px] leading-tight font-medium truncate px-0.5 transition-colors"
-                style={{ color: isSelected ? '#E2E8F0' : '#64748B' }}
+                style={{ color: isSelected ? '#E2E8F0' : '#94A3B8' }}
               >
                 {color.name}
               </p>
@@ -142,7 +142,7 @@ const ColorGrid: React.FC<ColorGridProps> = ({
       {colors.length > PREVIEW_COUNT && onToggleExpand && (
         <button
           onClick={onToggleExpand}
-          className="w-full py-2 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all border border-[#1E293B] hover:border-[#334155] hover:bg-[#111827] text-center"
+          className="w-full min-h-[44px] py-2.5 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all border border-[#1E293B] hover:border-[#334155] hover:bg-[#111827] text-center flex items-center justify-center active:scale-[0.98] touch-manipulation"
           style={{ color: ringColor }}
         >
           {isExpanded
