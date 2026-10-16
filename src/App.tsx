@@ -27,7 +27,7 @@ import AdvancedCatalog from './components/catalog/AdvancedCatalog';
 import { useHistory } from './hooks/useHistory';
 import { useZoomPan } from './hooks/useZoomPan';
 import { useAIProcessing } from './hooks/useAIProcessing';
-import { downscaleImage } from './utils/image';
+import { downscaleImage, processCameraOrUploadImage } from './utils/image';
 import { API_BASE } from './utils/apiConfig';
 import { detectSections, quickRender, roofQuickRender, enhanceImage } from './utils/gemini';
 
@@ -85,6 +85,7 @@ const App: React.FC = () => {
   const [swatchPreviewImage, setSwatchPreviewImage] = useState<string | null>(null);
   const [imageDimensions, setImageDimensions] = useState({ width: 1920, height: 1080 });
   const [imageOptimizeInfo, setImageOptimizeInfo] = useState<string | null>(null);
+  const [isOptimizingImage, setIsOptimizingImage] = useState(false);
 
   // --- PIPELINE STATE ---
   const [renderPhase, setRenderPhase] = useState<'idle' | 'roof' | 'siding' | 'done'>('idle');
@@ -108,21 +109,37 @@ const App: React.FC = () => {
 
   // --- HANDLERS ---
   const handleUpload = async (file: File) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const dataUrl = e.target?.result as string;
-      setSelectedImage(dataUrl);
+    setIsOptimizingImage(true);
+    try {
+      const processed = await processCameraOrUploadImage(file, 1920, 0.88);
+      setSelectedImage(processed.dataUrl);
+      setImageDimensions({ width: processed.width, height: processed.height });
+      setImageOptimizeInfo(processed.infoText);
       setQuickResult(null);
       setResultImage(null);
       setEnhancedImage(null);
       setSections([]);
       setShowEnhancePrompt(true);
-      
-      const img = new Image();
-      img.onload = () => setImageDimensions({ width: img.width, height: img.height });
-      img.src = dataUrl;
-    };
-    reader.readAsDataURL(file);
+    } catch (err) {
+      console.error('Mobile camera image optimization error, using safe fallback:', err);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const dataUrl = e.target?.result as string;
+        setSelectedImage(dataUrl);
+        setQuickResult(null);
+        setResultImage(null);
+        setEnhancedImage(null);
+        setSections([]);
+        setShowEnhancePrompt(true);
+        
+        const img = new Image();
+        img.onload = () => setImageDimensions({ width: img.width, height: img.height });
+        img.src = dataUrl;
+      };
+      reader.readAsDataURL(file);
+    } finally {
+      setIsOptimizingImage(false);
+    }
   };
 
   const handleStartOver = () => {
@@ -180,7 +197,8 @@ const App: React.FC = () => {
       setRoofPassResult(null);
       
       try {
-        let currentImage = selectedImage;
+        // DEFENSIVE: Ensure image is scaled and web-friendly (max 1920px)
+        let currentImage = await downscaleImage(selectedImage, 1920);
 
         // --- PASS 1: ROOF + GUTTERS ---
         if (hasRoofChanges) {
@@ -197,7 +215,7 @@ const App: React.FC = () => {
             }));
 
           const base64 = currentImage.split(',')[1];
-          const mime = currentImage.split(';')[0].split(':')[1];
+          const mime = currentImage.split(';')[0].split(':')[1] || 'image/jpeg';
           const resultImage = await roofQuickRender(base64, mime, roofZonesPayload);
           currentImage = resultImage;
           setRoofPassResult(currentImage);
@@ -329,6 +347,7 @@ const App: React.FC = () => {
                 setImageOptimizeInfo('House photo optimized for visualization');
               }}
               fileInputRef={fileInputRef}
+              isOptimizing={isOptimizingImage}
             />
 
             {/* Catalog Area */}

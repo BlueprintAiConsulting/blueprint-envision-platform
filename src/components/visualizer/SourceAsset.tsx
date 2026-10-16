@@ -1,5 +1,5 @@
 import React from 'react';
-import { Upload, X, Check, Wand2, Camera } from 'lucide-react';
+import { Upload, X, Check, Wand2, Camera, Loader2 } from 'lucide-react';
 
 interface SourceAssetProps {
   selectedImage: string | null;
@@ -17,6 +17,7 @@ interface SourceAssetProps {
   onAcceptEnhanced: () => void;
   fileInputRef: React.RefObject<HTMLInputElement | null>;
   cameraInputRef?: React.RefObject<HTMLInputElement | null>;
+  isOptimizing?: boolean;
 }
 
 const SourceAsset: React.FC<SourceAssetProps> = ({
@@ -35,6 +36,7 @@ const SourceAsset: React.FC<SourceAssetProps> = ({
   onAcceptEnhanced,
   fileInputRef,
   cameraInputRef,
+  isOptimizing = false,
 }) => {
   // Internal camera ref fallback when not provided by parent
   const internalCameraRef = React.useRef<HTMLInputElement>(null);
@@ -46,13 +48,15 @@ const SourceAsset: React.FC<SourceAssetProps> = ({
           <div className="w-6 h-6 bg-[#1E3A8A] text-[#60A5FA] rounded flex items-center justify-center text-xs font-bold">01</div>
           <h2 className="text-sm font-bold uppercase tracking-wider text-[#94A3B8]">Source Asset</h2>
         </div>
-        {/* Hidden file inputs — gallery picker + camera capture */}
+        {/* Accessible hidden file inputs — using sr-only ensures iOS WebKit never ignores programmatic clicks */}
         <input
           type="file"
           ref={fileInputRef}
           onChange={(e) => { if (e.target.files?.[0]) { onUpload(e.target.files[0]); e.target.value = ''; } }}
           accept="image/*"
-          className="hidden"
+          className="sr-only"
+          tabIndex={-1}
+          aria-hidden="true"
         />
         <input
           type="file"
@@ -60,7 +64,9 @@ const SourceAsset: React.FC<SourceAssetProps> = ({
           onChange={(e) => { if (e.target.files?.[0]) { onUpload(e.target.files[0]); e.target.value = ''; } }}
           accept="image/*"
           capture="environment"
-          className="hidden"
+          className="sr-only"
+          tabIndex={-1}
+          aria-hidden="true"
         />
 
         <div
@@ -68,11 +74,18 @@ const SourceAsset: React.FC<SourceAssetProps> = ({
           onDragOver={onDragOver}
           className={`border-2 border-dashed rounded-lg transition-all ${selectedImage ? 'border-[#3B82F6] bg-[#1E3A8A]/20 p-4' : 'border-[#334155] hover:border-[#3B82F6] hover:bg-[#1E293B] p-6'}`}
         >
-          {selectedImage ? (
+          {isOptimizing ? (
+            <div className="flex flex-col items-center justify-center py-8 gap-3">
+              <Loader2 className="w-8 h-8 text-[#60A5FA] animate-spin" />
+              <p className="font-bold text-sm text-[#E2E8F0]">Calibrating Camera Photo…</p>
+              <p className="text-[10px] text-[#64748B]">Auto-orienting &amp; optimizing for fast mobile rendering</p>
+            </div>
+          ) : selectedImage ? (
             <div className="w-full">
               <div className="relative w-full rounded-md overflow-hidden shadow-inner bg-[#0F172A] group">
                 <img src={selectedImage} alt="Uploaded" className="w-full h-auto max-h-72 object-contain" />
-                <div className="absolute inset-0 bg-[#0F172A]/75 flex items-center justify-center gap-2 sm:opacity-0 sm:group-hover:opacity-100 opacity-100 transition-opacity">
+                {/* Desktop hover overlay (hidden on mobile to prevent blocking photo) */}
+                <div className="absolute inset-0 bg-[#0F172A]/75 hidden sm:flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button
                     onClick={onReplaceClick}
                     className="flex items-center gap-1.5 bg-[#3B82F6] hover:bg-[#2563EB] text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full transition-colors shadow-lg"
@@ -87,26 +100,43 @@ const SourceAsset: React.FC<SourceAssetProps> = ({
                   </button>
                 </div>
               </div>
+
+              {/* Dedicated Mobile Action Buttons — large 44px tap targets, keeps thumbnail bright and clear */}
+              <div className="flex sm:hidden gap-2 mt-3">
+                <button
+                  onClick={() => (camRef as React.RefObject<HTMLInputElement>).current?.click()}
+                  className="flex-1 min-h-[44px] flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg bg-[#1E3A8A] text-[#60A5FA] border border-[#3B82F6]/40 text-[11px] font-bold uppercase tracking-wider active:scale-[0.98] shadow-md touch-manipulation"
+                >
+                  <Camera className="w-4 h-4" /> Retake Photo
+                </button>
+                <button
+                  onClick={onReplaceClick}
+                  className="flex-1 min-h-[44px] flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg bg-[#111827] text-[#94A3B8] border border-[#1E293B] text-[11px] font-bold uppercase tracking-wider active:scale-[0.98] touch-manipulation"
+                >
+                  <Upload className="w-4 h-4" /> Gallery
+                </button>
+              </div>
+
               <p className="text-[10px] text-[#64748B] mt-2 text-center font-medium hidden sm:block">Hover to replace · click camera to shoot live</p>
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center">
               <Upload className="w-8 h-8 text-[#3B82F6] mb-3 opacity-80" />
               <p className="font-bold text-sm text-[#E2E8F0] text-center">Upload or Take a Photo</p>
-              <p className="text-[10px] text-[#64748B] mt-1 text-center">JPG · PNG · WebP — auto-optimized</p>
+              <p className="text-[10px] text-[#64748B] mt-1 text-center">JPG · PNG · WebP — auto-optimized for mobile</p>
 
-              {/* CTA buttons — camera + gallery, visible on all devices */}
-              <div className="mt-4 flex gap-2 w-full max-w-xs">
+              {/* CTA buttons — camera + gallery, optimized for mobile touch */}
+              <div className="mt-4 flex gap-2.5 w-full max-w-xs">
                 <button
                   onClick={(e) => { e.stopPropagation(); (camRef as React.RefObject<HTMLInputElement>).current?.click(); }}
-                  className="flex-1 flex flex-col items-center gap-1.5 py-3 rounded-xl bg-[#3B82F6]/20 hover:bg-[#3B82F6]/30 active:scale-[0.97] border border-[#3B82F6]/50 transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)] animate-pulse-glow"
+                  className="flex-1 min-h-[52px] flex flex-col items-center justify-center gap-1.5 py-3 rounded-xl bg-[#3B82F6]/20 hover:bg-[#3B82F6]/30 active:scale-[0.96] border border-[#3B82F6]/50 transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)] animate-pulse-glow touch-manipulation cursor-pointer"
                 >
                   <Camera className="w-5 h-5 text-[#60A5FA]" />
                   <span className="text-[10px] font-bold uppercase tracking-widest text-[#60A5FA]">Camera</span>
                 </button>
                 <button
                   onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
-                  className="flex-1 flex flex-col items-center gap-1.5 py-3 rounded-xl bg-[#111827] hover:bg-[#1E293B] active:scale-[0.97] border border-[#334155] hover:border-[#3B82F6]/40 transition-all"
+                  className="flex-1 min-h-[52px] flex flex-col items-center justify-center gap-1.5 py-3 rounded-xl bg-[#111827] hover:bg-[#1E293B] active:scale-[0.96] border border-[#334155] hover:border-[#3B82F6]/40 transition-all touch-manipulation cursor-pointer"
                 >
                   <Upload className="w-5 h-5 text-[#64748B]" />
                   <span className="text-[10px] font-bold uppercase tracking-widest text-[#64748B]">Gallery</span>
