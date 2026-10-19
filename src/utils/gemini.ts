@@ -82,48 +82,70 @@ Return ONLY valid JSON - no markdown, no code fences, no explanation, matching t
     }
   });
 
-  const rawText = response.candidates?.[0]?.content?.parts?.[0]?.text || '';
-  const cleaned = rawText.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+  const text = response.text || '';
+  const cleaned = text.replace(/```json\n?|```/g, '').trim();
+  const data = JSON.parse(cleaned);
 
-  let parsed: { isResidentialHouse: boolean; sections: { name: string; maskTarget: string }[], optionalSections?: { name: string; maskTarget: string }[] };
-  try {
-    const firstBrace = cleaned.indexOf('{');
-    const lastBrace = cleaned.lastIndexOf('}');
-    if (firstBrace === -1 || lastBrace === -1) throw new Error("No JSON object found");
-    const jsonString = cleaned.substring(firstBrace, lastBrace + 1);
-    parsed = JSON.parse(jsonString);
-  } catch {
-    throw new Error('AI returned an invalid format. Please try a clearer image.');
+  if (data.isResidentialHouse === false) {
+    throw new Error('This image does not appear to be a residential house. Please upload a clear photo of a house exterior.');
   }
 
-  if (parsed.isResidentialHouse === false) {
-    throw new Error('PREFLIGHT_FAILURE: The uploaded image does not appear to be a residential house or building suitable for siding. Please upload a clear exterior photo.');
-  }
+  return {
+    sections: data.sections || [],
+    optionalSections: data.optionalSections || []
+  };
+};
 
-  const EXCLUDED_NAMES = ['front door', 'entry door', 'side door', 'door'];
-  const OPTIONAL_NAMES = ['shutters', 'trim', 'corner boards'];
+export const autoMask = async (imageBase64: string, mimeType: string = 'image/jpeg', maskTarget: string): Promise<string> => {
+  validateImagePayload(imageBase64, mimeType);
+  const rawBase64 = imageBase64.includes(',') ? imageBase64.split(',')[1] : imageBase64;
+  const targetLower = maskTarget.toLowerCase();
+  const allExclusions = ['roof', 'windows', 'window frames', 'shutters', 'doors', 'garage doors', 'trim', 'gutters', 'downspouts', 'fascia', 'soffits', 'foundation', 'concrete', 'sky', 'grass', 'trees', 'plants', 'people', 'vehicles', 'shadows'];
+  const activeExclusions = allExclusions.filter(e => !targetLower.includes(e));
 
-  parsed.sections = (parsed.sections || []).filter(s => !EXCLUDED_NAMES.some(ex => s.name.toLowerCase().includes(ex)));
-  
-  const primarySections = parsed.sections.filter(s => !OPTIONAL_NAMES.some(opt => s.name.toLowerCase().includes(opt)));
-  const accentFromSections = parsed.sections.filter(s => OPTIONAL_NAMES.some(opt => s.name.toLowerCase().includes(opt)));
-  const rawOptional = parsed.optionalSections || [];
-  const filteredOptional = rawOptional.filter(s => !EXCLUDED_NAMES.some(ex => s.name.toLowerCase().includes(ex)));
-  const allOptional = [...accentFromSections, ...filteredOptional];
-  
-  const seenOpt = new Set<string>();
-  const uniqueOptional = allOptional.filter(s => {
-    const key = s.name.toLowerCase();
-    if (seenOpt.has(key)) return false;
-    seenOpt.add(key);
-    return true;
+  const response = await ai.models.generateContent({
+    model: 'gemini-3.1-flash-image-preview',
+    contents: {
+      parts: [
+        { inlineData: { data: rawBase64, mimeType: mimeType || 'image/jpeg' } },
+        {
+          text: `Create a pixel-perfect, high-contrast binary segmentation mask (black and white only) for the following target: "${maskTarget}".
+
+CRITICAL RULES:
+1. The ${maskTarget} MUST be PURE WHITE (#FFFFFF).
+2. EVERYTHING ELSE MUST be PURE BLACK (#000000).
+3. EXCLUDE: ${activeExclusions.join(', ')}.
+4. SHARP EDGES: Ensure the mask has crisp, sharp boundaries. NO BLUR, NO GRADIENTS, NO GRAYSCALE.
+5. ACCURACY: Carefully follow the architectural lines of the house.
+6. OUTPUT: Return only a flat, 2D black and white silhouette mask image.`
+        }
+      ]
+    },
+    config: { responseModalities: ['IMAGE', 'TEXT'] }
   });
 
-  return { sections: primarySections, optionalSections: uniqueOptional };
+  let maskBase64 = '';
+  for (const part of response.candidates?.[0]?.content?.parts || []) {
+    if (part.inlineData) {
+      maskBase64 = `data:${part.inlineData.mimeType || 'image/png'};base64,${part.inlineData.data}`;
+      break;
+    }
+  }
+
+  if (!maskBase64) throw new Error('AI model did not return a mask image.');
+  return maskBase64;
 };
 
 type TextureStyleKey = 'horizontal-lap' | 'dutch-lap' | 'board-batten' | 'shake';
-interface QuickZoneData { name: string; lineName: string; colorName: string; colorHex: string; hue: string; style?: 'horizontal' | 'vertical'; textureStyle?: TextureStyleKey; }
+export interface QuickZoneData {
+  name: string;
+  lineName: string;
+  colorName: string;
+  colorHex: string;
+  hue: string;
+  style?: 'horizontal' | 'vertical';
+  textureStyle?: TextureStyleKey;
+}
 
 const TEXTURE_PROFILE_DESCRIPTIONS: Record<TextureStyleKey, string> = {
   'horizontal-lap':  'traditional horizontal lap clapboard siding — planks run parallel to ground with a slight bottom reveal on each course',
@@ -132,7 +154,7 @@ const TEXTURE_PROFILE_DESCRIPTIONS: Record<TextureStyleKey, string> = {
   'shake':           'staggered cedar perfection shingle siding — squared-edge cedar shingles in overlapping horizontal rows with visible individual shingle units',
 };
 
-export const quickRender = async (imageBase64: string, mimeType: string, zones: QuickZoneData[]) => {
+export const quickRender = async (imageBase64: string, mimeType: string, zones: QuickZoneData[]): Promise<string> => {
   validateImagePayload(imageBase64, mimeType);
   const rawBase64 = imageBase64.includes(',') ? imageBase64.split(',')[1] : imageBase64;
 
@@ -179,37 +201,69 @@ ${hasVerticalZones ? '7' : '6'}. PHOTOREALISM: The result must be pristine and p
   return resultImage;
 };
 
-export const roofQuickRender = async (imageBase64: string, mimeType: string, zones: any[]) => {
+export const generateSiding = async (
+  imageBase64: string,
+  mimeType: string,
+  sections: Array<{
+    name: string;
+    maskData: string | null;
+    selectedLine: { line: string; material: string };
+    selectedColor: { name: string; hex: string; hue: string };
+  }>,
+  lightingCondition: string = 'Natural Daylight'
+): Promise<string> => {
   validateImagePayload(imageBase64, mimeType);
   const rawBase64 = imageBase64.includes(',') ? imageBase64.split(',')[1] : imageBase64;
 
-  let prompt = `You are a strict, precise material-replacement engine mapping new textures onto a residential roof.\n\nApply ONLY these changes:\n`;
-  zones.forEach(z => {
-    prompt += `• ${z.name}: ${z.productName} "${z.colorName}" — ${z.hue} (hex ref: ${z.colorHex}) [Material: ${z.materialType}]\n`;
+  const parts: any[] = [
+    { inlineData: { data: rawBase64, mimeType: mimeType || 'image/jpeg' } },
+  ];
+
+  let promptText = `You are an expert architectural visualizer. Modify this house image according to the following section specifications:`;
+
+  sections.forEach((section, index) => {
+    if (section.maskData) {
+      const maskBase64 = section.maskData.includes(',') ? section.maskData.split(',')[1] : section.maskData;
+      parts.push({ inlineData: { data: maskBase64, mimeType: 'image/jpeg' } });
+      promptText += `\n\nSECTION ${index + 1} (${section.name}):
+- Target Area: Defined by the provided mask image #${index + 1} (where white is the target).
+- Material: ${section.selectedLine.line} ${section.selectedLine.material}
+- Color: ${section.selectedColor.name} — ${section.selectedColor.hue} (Hex reference: ${section.selectedColor.hex})`;
+    }
   });
-  prompt += `\nCRITICAL RULES:
-1. PRESERVATION: You MUST strictly map the new roofing to the existing roof geometry. DO NOT alter the structural layout, camera perspective, or aspect ratio.
-2. NEGATIVE CONSTRAINTS: DO NOT add, remove, or modify siding, windows, doors, gutters, sky, trees, shadows, or lawn. Leave them 100% untouched.
-3. SCALE: The shingle scale must accurately match the scale of the house in the photograph.
-4. LIGHTING: Keep the exact same sunlight, shadows, and lighting direction as the original photo.
-5. PHOTOREALISM: The result must be pristine and professional. No AI artifacts, melting edges, or blurriness.`;
+
+  promptText += `\n\nCRITICAL INSTRUCTIONS:
+1. HARD BOUNDARIES: Treat the provided white masks as ABSOLUTE constraints. The new siding MUST NOT bleed over the masked boundaries into unmasked areas.
+2. GEOMETRIC PRESERVATION: You are functioning as a precise material-replacement engine, NOT a creative image generator. You MUST preserve the exact geometric structure, structural lines, perspective, lighting direction, and surrounding environment of the source image.
+3. NEGATIVE CONSTRAINTS: DO NOT TOUCH or alter roof shingles, window glass, door glass, gutters, downspouts, landscaping, driveways, or sky unless explicitly covered by a white mask. Shutters, trim boards, corner boards, soffits, fascia, doors, garage doors, brick, stone, masonry, stucco, and EIFS surfaces MAY all be altered if covered by a white mask.
+4. LIGHTING INTEGRITY: Apply a ${lightingCondition.toLowerCase()} lighting condition to the siding, but respect the original shadow map of the house.
+5. SCALE: Ensure the siding laps/boards are correctly scaled relative to the distance of the house.
+6. PHOTOREALISM: The applied siding must look like a high-end architectural photo, avoiding any blurry "AI generation" artifacts.`;
+
+  parts.push({ text: promptText });
 
   const response = await ai.models.generateContent({
     model: 'gemini-3.1-flash-image-preview',
-    contents: { parts: [{ inlineData: { data: rawBase64, mimeType: mimeType || 'image/jpeg' } }, { text: prompt }] },
+    contents: { parts },
     config: { responseModalities: ['IMAGE', 'TEXT'] },
   });
 
   let resultImage: string | null = null;
   for (const part of response.candidates?.[0]?.content?.parts || []) {
-    if (part.inlineData) { resultImage = `data:image/png;base64,${part.inlineData.data}`; break; }
+    if (part.inlineData) {
+      resultImage = `data:image/png;base64,${part.inlineData.data}`;
+      break;
+    }
   }
-  
-  if (!resultImage) throw new Error('AI model did not return an image. Please try again.');
+
+  if (!resultImage) {
+    throw new Error('Failed to generate the visualized image. Please try again.');
+  }
+
   return resultImage;
 };
 
-export const enhanceImage = async (imageBase64: string, mimeType: string = 'image/jpeg') => {
+export const enhanceImage = async (imageBase64: string, mimeType: string = 'image/jpeg'): Promise<{ enhancedImageBase64: string; mimeType: string }> => {
   validateImagePayload(imageBase64, mimeType);
   const rawBase64 = imageBase64.includes(',') ? imageBase64.split(',')[1] : imageBase64;
   
