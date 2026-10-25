@@ -83,8 +83,8 @@ export default function App() {
 
   // --- Keep-alive ping — prevents Render free-tier cold starts ---
   // Fires once on mount (warms the server) then every 10 min while tab is open.
-  // Pair with UptimeRobot (free) pinging /api/ping every 5 min for 24/7 warmth.
   useEffect(() => {
+    if (typeof window !== 'undefined' && window.location.hostname.endsWith('github.io')) return;
     const ping = () => fetch('/api/ping').catch(() => {});
     ping(); // immediate warm-up on load
     const id = setInterval(ping, 10 * 60 * 1000); // every 10 minutes
