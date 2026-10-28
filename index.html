@@ -4,6 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <!-- Canonical Domain Redirect: Route any github.io traffic directly to the authoritative domain -->
+    <script>
+      (function() {
+        if (window.location.hostname.endsWith('github.io')) {
+          var path = window.location.pathname.replace(/^\/blueprint-envision-platform/, '') || '/';
+          window.location.replace('https://blueprint-envision.web.app' + path + window.location.search + window.location.hash);
+        }
+      })();
+    </script>
+
     <!-- Primary Meta -->
     <title>BlueprintEnvision — Exterior Visualizer</title>
     <meta name="description" content="AI-powered exterior visualizer. Preview siding, shutters, trim, and accents on your home — see any color combination in seconds." />
