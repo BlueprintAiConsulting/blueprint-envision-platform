@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
 /* ────── Base Overrides ────── */
 html {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -9,18 +15,57 @@ html {
 }
 
 body {
-  background: #060B18;
-  background-image:
-    linear-gradient(to right, rgba(30, 41, 59, 0.25) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(30, 41, 59, 0.25) 1px, transparent 1px);
-  background-size: 64px 64px;
+  background: #05060c;
   color: #E2E8F0;
   overflow-x: hidden;
 }
 
+.font-display,
 .font-serif-editorial {
-  font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  font-family: 'Space Grotesk', sans-serif;
   letter-spacing: -0.02em;
+}
+
+.blueprint-grid {
+  position: relative;
+}
+
+.blueprint-grid::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(to right, hsl(210 100% 50% / 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, hsl(210 100% 50% / 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.blueprint-grid::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(to right, hsl(210 100% 50% / 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, hsl(210 100% 50% / 0.07) 1px, transparent 1px);
+  background-size: 200px 200px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.immersive-scanlines {
+  background: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.02) 0 1px, transparent 1px 3px);
+  pointer-events: none;
+}
+
+.immersive-vignette {
+  background: radial-gradient(120% 90% at 50% 40%, transparent 45%, #05060c 100%);
+  pointer-events: none;
+}
+
+.galactic-glow {
+  box-shadow: 0 0 0 1px hsl(210 100% 50% / 0.35), 0 0 26px hsl(210 100% 50% / 0.38), 0 0 72px hsl(190 100% 60% / 0.20);
 }
 
 .arc-frame {

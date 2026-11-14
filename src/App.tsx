@@ -1879,23 +1879,25 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0E17] text-[#F8FAFC] font-sans selection:bg-[#3B82F6]/30 selection:text-[#60A5FA]">
+    <div className="min-h-screen bg-[#05060c] text-[#F8FAFC] font-sans selection:bg-[#0080FF]/30 selection:text-[#57c8ff]">
       {/* Blueprint Grid Background (Dark Mode) */}
       <div className="fixed inset-0 pointer-events-none opacity-20" 
-           style={{ backgroundImage: 'radial-gradient(#1E293B 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
+           style={{ backgroundImage: 'radial-gradient(#162544 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
 
       {/* Header */}
-      <header className="border-b border-[#0EA5E9]/20 bg-[#060B18]/90 backdrop-blur-md sticky top-0 z-10 shadow-[0_1px_20px_rgba(14,165,233,0.08)]">
+      <header className="border-b border-[#0080FF]/20 bg-[#05060c]/90 backdrop-blur-md sticky top-0 z-10 shadow-[0_1px_20px_rgba(0,128,255,0.12)]">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate("/")}>
-            <img
-              src={assetPath("/logo-mark.png")}
-              alt="Blueprint AI"
-              className="w-10 h-10 object-contain drop-shadow-[0_0_10px_rgba(14,165,233,0.55)]"
-            />
+            <div className="w-10 h-10 rounded-full overflow-hidden border border-[#0080FF]/50 shadow-[0_0_14px_rgba(0,128,255,0.45)] shrink-0">
+              <img
+                src={assetPath("/bp-new-logo.jpg")}
+                alt="Blueprint AI Consulting Co."
+                className="w-full h-full object-cover"
+              />
+            </div>
             <div className="flex flex-col">
-              <h1 className="font-bold text-lg leading-tight tracking-tight text-white">BLUEPRINT<span className="text-[#0EA5E9]">ENVISION</span></h1>
-              <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-[#0EA5E9]/50">by Blueprint AI Consulting Co.</span>
+              <h1 className="font-display font-bold text-lg leading-tight tracking-tight text-white">BLUEPRINT<span className="text-[#00D4FF]">ENVISION</span></h1>
+              <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-[#57c8ff]/70">by Blueprint AI Consulting Co.</span>
             </div>
           </div>
           <div className="flex items-center gap-3 md:gap-8 text-sm font-semibold text-[#94A3B8]">

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
+import GalacticNebula from './GalacticNebula';
 import {
   Sparkles, Shield, ChevronRight, Check, ArrowRight,
   Eye, Palette, Camera, MessageSquare, Menu, X,
@@ -305,29 +306,28 @@ export default function Landing() {
   };
 
   return (
-    <div className="min-h-screen bg-[#060B18] text-[#E2E8F0] selection:bg-[#3B82F6] selection:text-white relative">
+    <div className="min-h-screen bg-[#05060c] text-[#E2E8F0] selection:bg-[#00D4FF] selection:text-[#05060c] relative font-sans overflow-x-hidden">
       
-      {/* ──────── TOP AMBIENT ARCHITECTURAL GLOW ──────── */}
-      <div className="absolute top-0 inset-x-0 h-[650px] overflow-hidden pointer-events-none -z-10">
-        <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[1000px] h-[550px] bg-gradient-to-b from-[#3B82F6]/15 via-[#18A9D9]/10 to-transparent blur-[120px] rounded-full" />
-        <div className="absolute top-[10%] right-[15%] w-[450px] h-[450px] bg-[#83C248]/8 blur-[100px] rounded-full" />
-      </div>
+      {/* ──────── GALACTIC NEBULA & STARFIELD BACKGROUND ──────── */}
+      <GalacticNebula />
 
-      {/* ──────── MINIMALIST STICKY HEADER (ARCWAY STYLE) ──────── */}
-      <header className="sticky top-0 z-50 bg-[#060B18]/85 backdrop-blur-xl border-b border-[#1E293B]/70 transition-all">
+      {/* ──────── MINIMALIST STICKY HEADER ──────── */}
+      <header className="sticky top-0 z-50 bg-[#05060c]/80 backdrop-blur-xl border-b border-[#162544]/80 transition-all">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           
-          {/* Brand Wordmark */}
-          <div className="flex items-center gap-3 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#3B82F6] to-[#18A9D9] flex items-center justify-center shadow-[0_0_16px_rgba(59,130,246,0.5)]">
-              <Layers className="w-5 h-5 text-white" />
-            </div>
+          {/* Brand Wordmark & Circular Badge */}
+          <div className="flex items-center gap-3.5 cursor-pointer select-none group" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+            <img
+              src="/bp-new-logo.jpg"
+              alt="Blueprint AI Consulting Co."
+              className="w-10 h-10 rounded-full object-cover ring-2 ring-[#0080FF]/50 galactic-glow group-hover:scale-105 group-hover:ring-[#00D4FF] transition-all"
+            />
             <div className="flex flex-col">
-              <span className="font-extrabold text-base tracking-tight text-white flex items-center gap-1.5">
-                BLUEPRINT<span className="text-[#3B82F6]">ENVISION</span>
+              <span className="font-display font-bold text-base tracking-tight text-white flex items-center leading-none">
+                BLUEPRINT<span className="text-[#00D4FF] ml-1">ENVISION</span>
               </span>
-              <span className="text-[9px] uppercase tracking-[0.25em] font-semibold text-[#18A9D9]">
-                Architectural Exterior Platform
+              <span className="text-[8px] font-mono text-[#57c8ff] uppercase tracking-[0.22em] mt-1">
+                A Blueprint AI Product · Exterior Studio
               </span>
             </div>
           </div>
@@ -351,10 +351,10 @@ export default function Landing() {
             </button>
             <button
               onClick={() => navigate('/app')}
-              className="bg-[#83C248] hover:bg-[#93D553] text-[#060B18] px-5 py-2.5 rounded-lg text-xs font-extrabold uppercase tracking-wider transition-all shadow-[0_0_20px_rgba(131,194,72,0.35)] hover:shadow-[0_0_30px_rgba(131,194,72,0.5)] flex items-center gap-2 cursor-pointer active:scale-95"
+              className="bg-gradient-to-r from-[#0080FF] to-[#00D4FF] hover:from-[#0070E0] hover:to-[#38E1FF] text-[#05060c] px-5 py-2.5 rounded-lg text-xs font-display font-bold uppercase tracking-wider transition-all shadow-[0_0_20px_rgba(0,212,255,0.4)] hover:shadow-[0_0_30px_rgba(0,212,255,0.6)] flex items-center gap-2 cursor-pointer active:scale-95"
             >
               <span>Launch Studio</span>
-              <ArrowRight className="w-3.5 h-3.5 text-[#060B18]" />
+              <ArrowRight className="w-3.5 h-3.5 text-[#05060c]" />
             </button>
           </div>
 
@@ -370,16 +370,16 @@ export default function Landing() {
 
         {/* Mobile Dropdown */}
         {mobileMenuOpen && (
-          <div className="lg:hidden bg-[#0B131E] border-b border-[#1E293B] px-6 py-5 space-y-4">
+          <div className="lg:hidden bg-[#05060c]/95 backdrop-blur-xl border-b border-[#162544] px-6 py-5 space-y-4">
             <a href="#platform" className="block text-sm font-semibold text-[#94A3B8] hover:text-white" onClick={() => setMobileMenuOpen(false)}>Platform</a>
             <a href="#capabilities" className="block text-sm font-semibold text-[#94A3B8] hover:text-white" onClick={() => setMobileMenuOpen(false)}>Capabilities</a>
             <a href="#workflow" className="block text-sm font-semibold text-[#94A3B8] hover:text-white" onClick={() => setMobileMenuOpen(false)}>Workflow</a>
             <a href="#pricing" className="block text-sm font-semibold text-[#94A3B8] hover:text-white" onClick={() => setMobileMenuOpen(false)}>Pricing</a>
             <a href="#faq" className="block text-sm font-semibold text-[#94A3B8] hover:text-white" onClick={() => setMobileMenuOpen(false)}>FAQ</a>
-            <div className="pt-3 border-t border-[#1E293B] flex flex-col gap-2">
+            <div className="pt-3 border-t border-[#162544] flex flex-col gap-2">
               <button
                 onClick={() => { setMobileMenuOpen(false); navigate('/app'); }}
-                className="w-full bg-[#83C248] text-[#060B18] py-3 rounded-lg text-xs font-extrabold uppercase tracking-wider flex items-center justify-center gap-2"
+                className="w-full bg-gradient-to-r from-[#0080FF] to-[#00D4FF] text-[#05060c] py-3 rounded-lg text-xs font-extrabold uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,128,255,0.4)]"
               >
                 Launch Studio Visualizer <ArrowRight className="w-4 h-4" />
               </button>
@@ -389,39 +389,57 @@ export default function Landing() {
       </header>
 
       <main>
-        {/* ──────── HERO SECTION: EDITORIAL HEADLINE & CENTERPIECE SHOWCASE ──────── */}
-        <section className="pt-20 pb-24 px-4 sm:px-6 relative" id="platform">
-          <div className="max-w-6xl mx-auto text-center">
+        {/* ──────── HERO SECTION: GALACTIC IMMERSIVE SHOWCASE ──────── */}
+        <section className="pt-16 sm:pt-20 pb-24 px-4 sm:px-6 relative" id="platform">
+          <div className="max-w-6xl mx-auto text-center relative z-10">
             
+            {/* Official Glowing Blueprint Hero Badge */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.92, y: 8 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
+              className="mb-6 flex justify-center"
+            >
+              <img
+                src="/bp-new-logo.jpg"
+                alt="Blueprint AI Consulting Co."
+                width={336}
+                height={336}
+                loading="eager"
+                decoding="async"
+                className="h-24 w-24 sm:h-28 sm:w-28 lg:h-32 lg:w-32 rounded-full object-cover ring-2 ring-[#0080FF]/50 galactic-glow hover:scale-105 transition-transform"
+              />
+            </motion.div>
+
             {/* Pill Kicker */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#0F172A] border border-[#223448] shadow-inner mb-6"
+              transition={{ duration: 0.5, delay: 0.15 }}
+              className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#0A1224]/80 backdrop-blur-md border border-[#162544] shadow-[0_0_20px_rgba(0,128,255,0.25)] mb-6"
             >
-              <span className="w-2 h-2 rounded-full bg-[#83C248] animate-pulse" />
-              <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#18A9D9]">
+              <span className="w-2 h-2 rounded-full bg-[#00D4FF] animate-pulse" />
+              <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#00D4FF] font-mono">
                 AI-Powered Exterior Visualization Platform
               </span>
             </motion.div>
 
-            {/* Editorial Serif Headline */}
+            {/* Geometric Display Headline */}
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="font-serif-editorial text-4xl sm:text-6xl md:text-7xl font-normal text-white leading-[1.08] tracking-[-0.02em] max-w-4xl mx-auto mb-6"
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="font-display text-4xl sm:text-6xl md:text-7xl font-bold text-white leading-[1.08] tracking-tight max-w-4xl mx-auto mb-6"
             >
-              Turn exterior floorplans and photos into <span className="italic text-[#18A9D9]">photorealistic live experiences</span>.
+              Turn exterior floorplans and photos into <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00D4FF] via-[#54C7FF] to-[#0080FF]">photorealistic live experiences</span>.
             </motion.h1>
 
             {/* Subtitle */}
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-base sm:text-lg md:text-xl text-[#94A3B8] font-light max-w-2xl mx-auto mb-10 leading-relaxed"
+              transition={{ duration: 0.6, delay: 0.25 }}
+              className="text-base sm:text-lg md:text-xl text-slate-300 font-light max-w-2xl mx-auto mb-10 leading-relaxed font-sans"
             >
               Give homeowners and sales teams a millimeter-accurate preview of CertainTeed roofing, siding, and designer trims on their actual home in 30 seconds.
             </motion.p>
@@ -435,10 +453,10 @@ export default function Landing() {
             >
               <button
                 onClick={() => navigate('/app')}
-                className="w-full sm:w-auto px-8 py-3.5 rounded-lg bg-[#83C248] hover:bg-[#93D553] text-[#060B18] font-extrabold text-xs uppercase tracking-wider transition-all shadow-[0_0_24px_rgba(131,194,72,0.4)] hover:shadow-[0_0_36px_rgba(131,194,72,0.6)] flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+                className="w-full sm:w-auto px-8 py-3.5 rounded-lg bg-gradient-to-r from-[#0080FF] to-[#00D4FF] hover:from-[#0070E0] hover:to-[#38E1FF] text-[#05060c] font-display font-bold text-xs uppercase tracking-wider transition-all shadow-[0_0_24px_rgba(0,212,255,0.45)] hover:shadow-[0_0_36px_rgba(0,212,255,0.65)] flex items-center justify-center gap-2 cursor-pointer active:scale-95"
               >
                 <span>Launch Studio Visualizer</span>
-                <ArrowRight className="w-4 h-4 text-[#060B18]" />
+                <ArrowRight className="w-4 h-4 text-[#05060c]" />
               </button>
 
               <button
@@ -473,27 +491,27 @@ export default function Landing() {
                 />
 
                 {/* Subtle vignette gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#060B18]/90 via-transparent to-black/30 pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#05060c]/90 via-transparent to-black/30 pointer-events-none" />
 
                 {/* Top-Left Live Status Pill */}
-                <div className="absolute top-4 left-4 z-20 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#0B131E]/85 backdrop-blur-md border border-white/10 text-[11px] font-medium text-[#E2E8F0] shadow-lg">
-                  <span className="w-2 h-2 rounded-full bg-[#83C248] animate-ping" />
+                <div className="absolute top-4 left-4 z-20 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#0A1224]/85 backdrop-blur-md border border-[#162544] text-[11px] font-medium text-[#E2E8F0] shadow-lg">
+                  <span className="w-2 h-2 rounded-full bg-[#00D4FF] animate-ping" />
                   <span>3 contractors viewing</span>
                   <span className="text-[#64748B]">·</span>
-                  <span className="text-[#18A9D9] font-semibold">{currentPalette.roof.color} applied</span>
+                  <span className="text-[#57c8ff] font-semibold">{currentPalette.roof.color} applied</span>
                 </div>
 
                 {/* Top-Right Architecture HUD Badge */}
-                <div className="absolute top-4 right-4 z-20 hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#0B131E]/85 backdrop-blur-md border border-white/10 text-[11px] font-medium text-[#94A3B8] shadow-lg">
-                  <Compass className="w-3.5 h-3.5 text-[#3B82F6]" />
+                <div className="absolute top-4 right-4 z-20 hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#0A1224]/85 backdrop-blur-md border border-[#162544] text-[11px] font-medium text-[#94A3B8] shadow-lg">
+                  <Compass className="w-3.5 h-3.5 text-[#0080FF]" />
                   <span>CertainTeed® Precision Mesh</span>
                 </div>
 
                 {/* ── HOTSPOT 1: ROOF (TOP/CENTER) ── */}
                 <div className="absolute top-[22%] sm:top-[26%] left-[48%] -translate-x-1/2 z-20 group">
                   <div className="relative flex items-center justify-center cursor-pointer">
-                    <span className="w-7 h-7 rounded-full bg-[#3B82F6]/30 animate-ping absolute" />
-                    <span className="w-5 h-5 rounded-full bg-[#3B82F6] border-2 border-white flex items-center justify-center shadow-[0_0_15px_#3B82F6]">
+                    <span className="w-7 h-7 rounded-full bg-[#0080FF]/30 animate-ping absolute" />
+                    <span className="w-5 h-5 rounded-full bg-[#0080FF] border-2 border-white flex items-center justify-center shadow-[0_0_15px_#0080FF]">
                       <span className="w-1.5 h-1.5 rounded-full bg-white" />
                     </span>
                   </div>
@@ -501,10 +519,10 @@ export default function Landing() {
                   {/* Hotspot Floating Card */}
                   <div className="arc-hotspot absolute bottom-full mb-3 left-1/2 -translate-x-1/2 w-64 p-3.5 rounded-xl transition-all duration-300 pointer-events-auto">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[#3B82F6]">
+                      <span className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[#0080FF]">
                         ROOF ZONE · 32 SQ
                       </span>
-                      <span className="text-[9px] font-bold text-[#83C248] px-1.5 py-0.5 rounded bg-[#83C248]/15 border border-[#83C248]/30">
+                      <span className="text-[9px] font-bold text-[#00D4FF] px-1.5 py-0.5 rounded bg-[#00D4FF]/15 border border-[#00D4FF]/30">
                         {currentPalette.roof.tag}
                       </span>
                     </div>
@@ -537,10 +555,10 @@ export default function Landing() {
                   {/* Hotspot Floating Card */}
                   <div className="arc-hotspot absolute bottom-full mb-3 left-1/2 -translate-x-1/2 w-64 p-3.5 rounded-xl transition-all duration-300 pointer-events-auto">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[#18A9D9]">
+                      <span className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[#57c8ff]">
                         SIDING ZONE · MAIN ELEVATION
                       </span>
-                      <span className="text-[9px] font-bold text-[#60A5FA] px-1.5 py-0.5 rounded bg-[#3B82F6]/15 border border-[#3B82F6]/30">
+                      <span className="text-[9px] font-bold text-[#57c8ff] px-1.5 py-0.5 rounded bg-[#0080FF]/15 border border-[#0080FF]/30">
                         {currentPalette.siding.tag}
                       </span>
                     </div>
@@ -564,8 +582,8 @@ export default function Landing() {
                 {/* ── HOTSPOT 3: GABLE / TRIM (TOP/RIGHT) ── */}
                 <div className="absolute top-[42%] right-[22%] sm:right-[26%] z-20 group hidden sm:block">
                   <div className="relative flex items-center justify-center cursor-pointer">
-                    <span className="w-7 h-7 rounded-full bg-[#83C248]/30 animate-ping absolute" />
-                    <span className="w-5 h-5 rounded-full bg-[#83C248] border-2 border-white flex items-center justify-center shadow-[0_0_15px_#83C248]">
+                    <span className="w-7 h-7 rounded-full bg-[#00D4FF]/30 animate-ping absolute" />
+                    <span className="w-5 h-5 rounded-full bg-[#00D4FF] border-2 border-white flex items-center justify-center shadow-[0_0_15px_#00D4FF]">
                       <span className="w-1.5 h-1.5 rounded-full bg-white" />
                     </span>
                   </div>
@@ -573,10 +591,10 @@ export default function Landing() {
                   {/* Hotspot Floating Card */}
                   <div className="arc-hotspot absolute bottom-full mb-3 left-1/2 -translate-x-1/2 w-60 p-3.5 rounded-xl transition-all duration-300 pointer-events-auto">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[#83C248]">
+                      <span className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[#00D4FF]">
                         TRIM & SOFFIT ZONE
                       </span>
-                      <span className="text-[9px] font-bold text-[#83C248] px-1.5 py-0.5 rounded bg-[#83C248]/15 border border-[#83C248]/30">
+                      <span className="text-[9px] font-bold text-[#00D4FF] px-1.5 py-0.5 rounded bg-[#00D4FF]/15 border border-[#00D4FF]/30">
                         {currentPalette.trim.tag}
                       </span>
                     </div>
@@ -595,9 +613,9 @@ export default function Landing() {
 
                 {/* Bottom Interactive Palette Switcher Bar (Directly Inside Showcase Frame) */}
                 <div className="absolute bottom-4 inset-x-4 sm:inset-x-8 z-20">
-                  <div className="bg-[#0B131E]/90 backdrop-blur-xl border border-white/10 rounded-2xl p-2.5 sm:p-3 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-2xl">
+                  <div className="bg-[#0A1224]/90 backdrop-blur-xl border border-[#162544] rounded-2xl p-2.5 sm:p-3 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-2xl">
                     <div className="flex items-center gap-2 text-xs font-bold text-white shrink-0">
-                      <SlidersHorizontal className="w-4 h-4 text-[#18A9D9]" />
+                      <SlidersHorizontal className="w-4 h-4 text-[#00D4FF]" />
                       <span className="hidden sm:inline">Active Architectural Palette:</span>
                       <span className="sm:hidden">Palettes:</span>
                     </div>
@@ -609,8 +627,8 @@ export default function Landing() {
                           onClick={() => setActivePaletteIndex(idx)}
                           className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
                             activePaletteIndex === idx
-                              ? 'bg-[#3B82F6] text-white shadow-[0_0_16px_rgba(59,130,246,0.5)] border border-white/20'
-                              : 'bg-[#131F2E] text-[#94A3B8] hover:text-white hover:bg-[#1A2838] border border-transparent'
+                              ? 'bg-gradient-to-r from-[#0080FF] to-[#00D4FF] text-[#05060c] shadow-[0_0_16px_rgba(0,128,255,0.5)] border border-white/20'
+                              : 'bg-[#0D182F] text-[#94A3B8] hover:text-white hover:bg-[#132240] border border-transparent'
                           }`}
                         >
                           <span
@@ -624,7 +642,7 @@ export default function Landing() {
 
                     <button
                       onClick={() => navigate('/app')}
-                      className="hidden md:flex items-center gap-1.5 text-xs font-extrabold text-[#83C248] hover:text-[#93D553] px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
+                      className="hidden md:flex items-center gap-1.5 text-xs font-extrabold text-[#00D4FF] hover:text-[#57c8ff] px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
                     >
                       <span>Open in Studio</span>
                       <ArrowUpRight className="w-3.5 h-3.5" />
@@ -637,13 +655,13 @@ export default function Landing() {
           </div>
         </section>
 
-        {/* ──────── EDITORIAL STATEMENT BANNER (ARCWAY STYLE) ──────── */}
-        <section className="border-y border-[#1E293B]/80 py-20 px-6 bg-[#080E1E] relative">
+        {/* ──────── EDITORIAL STATEMENT BANNER (GALACTIC GLASS STYLE) ──────── */}
+        <section className="border-y border-[#162544] py-20 px-6 bg-[#05060c]/60 backdrop-blur-md relative">
           <div className="max-w-4xl mx-auto text-center space-y-6">
-            <div className="text-xs uppercase tracking-[0.28em] font-extrabold text-[#18A9D9]">
+            <div className="text-xs uppercase tracking-[0.28em] font-extrabold text-[#57c8ff]">
               WEBSITE · IN-HOME CONSULTATION · 4-SIDE FIELD TAKEOFF · ONE PLATFORM
             </div>
-            <p className="font-serif-editorial text-2xl sm:text-4xl md:text-5xl font-normal text-white leading-tight">
+            <p className="font-display text-2xl sm:text-4xl md:text-5xl font-bold text-white leading-tight tracking-tight">
               “Traditional swatch boards leave homeowners hesitating and reps leaving without a deposit. BlueprintEnvision renders their finished home before you stand up from the kitchen table.”
             </p>
             <div className="text-xs font-semibold text-[#64748B] tracking-wide">
@@ -658,10 +676,10 @@ export default function Landing() {
             
             {/* Left Narrative Column */}
             <div className="lg:col-span-5 space-y-6">
-              <div className="text-xs font-extrabold uppercase tracking-[0.25em] text-[#18A9D9]">
+              <div className="text-xs font-extrabold uppercase tracking-[0.25em] text-[#57c8ff]">
                 THE DISCONNECT IN EXTERIOR SALES
               </div>
-              <h2 className="font-serif-editorial text-3xl sm:text-5xl font-normal text-white leading-tight">
+              <h2 className="font-display text-3xl sm:text-5xl font-bold text-white leading-tight tracking-tight">
                 Contractors are losing high-ticket jobs they should be closing.
               </h2>
               <p className="text-sm sm:text-base text-[#94A3B8] leading-relaxed font-light">
@@ -673,11 +691,11 @@ export default function Landing() {
               
               <div className="pt-2 flex items-center gap-6 text-xs font-bold text-white">
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[#83C248]" />
+                  <CheckCircle2 className="w-4 h-4 text-[#00D4FF]" />
                   <span>Zero Homeowner Login</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[#83C248]" />
+                  <CheckCircle2 className="w-4 h-4 text-[#00D4FF]" />
                   <span>30s Render Velocity</span>
                 </div>
               </div>
@@ -687,7 +705,7 @@ export default function Landing() {
             <div className="lg:col-span-7 grid sm:grid-cols-2 gap-5">
               
               {/* Old Way Card */}
-              <div className="rounded-2xl p-6 bg-[#0B131E] border border-[#1E293B] shadow-xl flex flex-col justify-between">
+              <div className="rounded-2xl p-6 bg-[#0A1224]/85 backdrop-blur-md border border-[#162544] shadow-xl flex flex-col justify-between">
                 <div>
                   <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-bold uppercase tracking-wider mb-5">
                     Traditional Workflow
@@ -712,39 +730,39 @@ export default function Landing() {
                     </li>
                   </ul>
                 </div>
-                <div className="mt-8 pt-4 border-t border-[#1E293B] text-[11px] text-[#64748B]">
+                <div className="mt-8 pt-4 border-t border-[#162544] text-[11px] text-[#64748B]">
                   Result: Lost momentum, stalled deals, price-shopping
                 </div>
               </div>
 
               {/* BlueprintEnvision Card */}
-              <div className="rounded-2xl p-6 bg-[#0F172A] border border-[#3B82F6] shadow-[0_0_35px_rgba(59,130,246,0.18)] flex flex-col justify-between relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-[#3B82F6]/10 rounded-full blur-2xl pointer-events-none" />
+              <div className="rounded-2xl p-6 bg-[#0A1224]/90 backdrop-blur-md border border-[#0080FF] shadow-[0_0_35px_rgba(0,128,255,0.22)] flex flex-col justify-between relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[#0080FF]/15 rounded-full blur-2xl pointer-events-none" />
                 <div>
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#83C248]/15 border border-[#83C248]/30 text-[#83C248] text-[10px] font-bold uppercase tracking-wider mb-5">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#00D4FF]/15 border border-[#00D4FF]/30 text-[#00D4FF] text-[10px] font-bold uppercase tracking-wider mb-5">
                     BlueprintEnvision Standard
                   </div>
                   <h3 className="text-lg font-bold text-white mb-3">Instant Photorealistic AI</h3>
                   <ul className="space-y-3 text-xs text-[#E2E8F0]">
                     <li className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-[#83C248] shrink-0" />
+                      <Check className="w-4 h-4 text-[#00D4FF] shrink-0" />
                       <span>Snap a driveway photo or pull Google Street View in 10s</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-[#83C248] shrink-0" />
+                      <Check className="w-4 h-4 text-[#00D4FF] shrink-0" />
                       <span>CertainTeed Landmark & Monogram colors applied live</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-[#83C248] shrink-0" />
+                      <Check className="w-4 h-4 text-[#00D4FF] shrink-0" />
                       <span>Instant side-by-side comparison slider on reps iPad</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-[#83C248] shrink-0" />
+                      <Check className="w-4 h-4 text-[#00D4FF] shrink-0" />
                       <span>Average in-home consultation close rate: <strong>68%</strong></span>
                     </li>
                   </ul>
                 </div>
-                <div className="mt-8 pt-4 border-t border-[#223448] text-[11px] text-[#18A9D9] font-semibold">
+                <div className="mt-8 pt-4 border-t border-[#162544] text-[11px] text-[#57c8ff] font-semibold">
                   Result: Same-day deposit, higher contract margins
                 </div>
               </div>
@@ -753,15 +771,15 @@ export default function Landing() {
           </div>
         </section>
 
-        {/* ──────── INTERACTIVE ACCORDION FEATURE SHOWCASE (ARCWAY SIGNATURE) ──────── */}
-        <section className="py-24 px-6 bg-[#080E1E] border-y border-[#1E293B]/80" id="capabilities">
+        {/* ──────── INTERACTIVE ACCORDION FEATURE SHOWCASE ──────── */}
+        <section className="py-24 px-6 bg-[#05060c]/60 backdrop-blur-md border-y border-[#162544]" id="capabilities">
           <div className="max-w-7xl mx-auto">
             
             <div className="max-w-3xl mb-16">
-              <div className="text-xs font-extrabold uppercase tracking-[0.25em] text-[#18A9D9] mb-3">
+              <div className="text-xs font-extrabold uppercase tracking-[0.25em] text-[#57c8ff] mb-3">
                 WHAT BLUEPRINT ENVISION DOES
               </div>
-              <h2 className="font-serif-editorial text-3xl sm:text-5xl font-normal text-white leading-tight">
+              <h2 className="font-display text-3xl sm:text-5xl font-bold text-white leading-tight tracking-tight">
                 One unified platform instead of four disconnected tools.
               </h2>
             </div>
@@ -778,13 +796,13 @@ export default function Landing() {
                       onClick={() => setActiveAccordionId(feat.id)}
                       className={`rounded-2xl border transition-all cursor-pointer overflow-hidden ${
                         isOpen
-                          ? 'bg-[#0F172A] border-[#3B82F6]/60 shadow-[0_0_24px_rgba(59,130,246,0.12)]'
-                          : 'bg-[#0B131E] border-[#1E293B] hover:border-[#334155]'
+                          ? 'bg-[#0A1224]/90 border-[#0080FF]/70 shadow-[0_0_24px_rgba(0,128,255,0.18)]'
+                          : 'bg-[#0A1224]/75 border-[#162544] hover:border-[#0080FF]/40'
                       }`}
                     >
                       <div className="p-5 sm:p-6 flex items-start justify-between gap-4">
                         <div className="space-y-1">
-                          <div className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#18A9D9]">
+                          <div className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#57c8ff]">
                             {feat.badge}
                           </div>
                           <h3 className="text-base sm:text-lg font-bold text-white">
@@ -792,14 +810,14 @@ export default function Landing() {
                           </h3>
                         </div>
                         <div className={`w-8 h-8 rounded-full border flex items-center justify-center shrink-0 transition-colors ${
-                          isOpen ? 'border-[#3B82F6] bg-[#3B82F6]/20 text-[#60A5FA]' : 'border-[#223448] text-[#64748B]'
+                          isOpen ? 'border-[#00D4FF] bg-[#0080FF]/20 text-[#57c8ff]' : 'border-[#162544] text-[#64748B]'
                         }`}>
                           {isOpen ? '—' : '+'}
                         </div>
                       </div>
 
                       {isOpen && (
-                        <div className="px-5 sm:px-6 pb-6 pt-0 space-y-4 text-xs sm:text-sm text-[#94A3B8] leading-relaxed border-t border-[#1E293B]/60 mt-1">
+                        <div className="px-5 sm:px-6 pb-6 pt-0 space-y-4 text-xs sm:text-sm text-[#94A3B8] leading-relaxed border-t border-[#162544] mt-1">
                           <p className="pt-3">{feat.description}</p>
                           <div className="flex items-center gap-6 pt-2">
                             <div>
@@ -816,34 +834,34 @@ export default function Landing() {
                 <div className="pt-4">
                   <button
                     onClick={() => navigate('/app')}
-                    className="w-full py-4 rounded-xl bg-[#83C248] hover:bg-[#93D553] text-[#060B18] font-extrabold text-xs uppercase tracking-wider transition-all shadow-[0_0_20px_rgba(131,194,72,0.35)] flex items-center justify-center gap-2 cursor-pointer"
+                    className="w-full py-4 rounded-xl bg-gradient-to-r from-[#0080FF] to-[#00D4FF] hover:brightness-110 text-[#05060c] font-extrabold text-xs uppercase tracking-wider transition-all shadow-[0_0_24px_rgba(0,128,255,0.4)] flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <span>Test This In The Live Studio</span>
-                    <ArrowRight className="w-4 h-4 text-[#060B18]" />
+                    <ArrowRight className="w-4 h-4 text-[#05060c]" />
                   </button>
                 </div>
               </div>
 
               {/* Dynamic Feature Display Stage (Right) */}
               <div className="lg:col-span-6 sticky top-28">
-                <div className="arc-frame rounded-3xl p-3 sm:p-4 bg-[#0B131E] border border-[#223448] shadow-2xl">
-                  <div className="rounded-2xl overflow-hidden bg-[#060B18] border border-[#1E293B] p-6 space-y-6">
+                <div className="arc-frame rounded-3xl p-3 sm:p-4 bg-[#0A1224]/85 backdrop-blur-md border border-[#162544] shadow-2xl">
+                  <div className="rounded-2xl overflow-hidden bg-[#05060c]/90 border border-[#162544] p-6 space-y-6">
                     
                     {/* Header bar */}
-                    <div className="flex items-center justify-between border-b border-[#1E293B] pb-4">
+                    <div className="flex items-center justify-between border-b border-[#162544] pb-4">
                       <div className="flex items-center gap-2.5">
-                        <div className="w-2.5 h-2.5 rounded-full bg-[#10B981] animate-pulse" />
+                        <div className="w-2.5 h-2.5 rounded-full bg-[#00D4FF] animate-pulse" />
                         <span className="text-[11px] font-bold text-white uppercase tracking-wider">
                           Active Module: {activeAccordion.title}
                         </span>
                       </div>
-                      <span className="text-[10px] font-mono text-[#18A9D9] px-2 py-0.5 rounded bg-[#18A9D9]/10 border border-[#18A9D9]/20">
+                      <span className="text-[10px] font-mono text-[#57c8ff] px-2 py-0.5 rounded bg-[#0080FF]/15 border border-[#0080FF]/30">
                         {activeAccordion.badge}
                       </span>
                     </div>
 
                     {/* Stage Preview Image Mockup */}
-                    <div className="relative rounded-xl overflow-hidden aspect-[16/10] bg-[#0F172A] border border-[#223448] shadow-inner">
+                    <div className="relative rounded-xl overflow-hidden aspect-[16/10] bg-[#0A1224] border border-[#162544] shadow-inner">
                       <img
                         src={assetPath('demo-pa-bi-level.png')}
                         alt="Feature preview"
@@ -852,10 +870,10 @@ export default function Landing() {
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
                       
                       <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-xs">
-                        <div className="bg-[#0B131E]/90 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10 text-white font-semibold">
+                        <div className="bg-[#0A1224]/90 backdrop-blur-md px-3 py-1.5 rounded-lg border border-[#162544] text-white font-semibold">
                           {activeAccordion.subtitle}
                         </div>
-                        <div className="bg-[#83C248] text-[#060B18] font-extrabold px-3 py-1.5 rounded-lg shadow-lg">
+                        <div className="bg-gradient-to-r from-[#0080FF] to-[#00D4FF] text-[#05060c] font-extrabold px-3 py-1.5 rounded-lg shadow-lg">
                           Live Active
                         </div>
                       </div>
@@ -863,13 +881,13 @@ export default function Landing() {
 
                     {/* Dynamic Specs Grid */}
                     <div className="grid grid-cols-2 gap-3 pt-2">
-                      <div className="p-3.5 rounded-xl bg-[#0B131E] border border-[#1E293B]">
+                      <div className="p-3.5 rounded-xl bg-[#0A1224] border border-[#162544]">
                         <div className="text-[10px] uppercase tracking-wider font-semibold text-[#64748B]">Performance Metric</div>
                         <div className="text-base font-bold text-white mt-0.5">{activeAccordion.stat}</div>
                       </div>
-                      <div className="p-3.5 rounded-xl bg-[#0B131E] border border-[#1E293B]">
+                      <div className="p-3.5 rounded-xl bg-[#0A1224] border border-[#162544]">
                         <div className="text-[10px] uppercase tracking-wider font-semibold text-[#64748B]">Architecture Mode</div>
-                        <div className="text-base font-bold text-[#18A9D9] mt-0.5">{activeAccordion.statLabel}</div>
+                        <div className="text-base font-bold text-[#57c8ff] mt-0.5">{activeAccordion.statLabel}</div>
                       </div>
                     </div>
 
@@ -882,13 +900,13 @@ export default function Landing() {
           </div>
         </section>
 
-        {/* ──────── THREE-STEP ROLLOUT WORKFLOW (ARCWAY STYLE) ──────── */}
+        {/* ──────── THREE-STEP ROLLOUT WORKFLOW ──────── */}
         <section className="py-24 px-6 max-w-7xl mx-auto" id="workflow">
           <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">
-            <div className="text-xs font-extrabold uppercase tracking-[0.25em] text-[#18A9D9]">
+            <div className="text-xs font-extrabold uppercase tracking-[0.25em] text-[#57c8ff]">
               HOW IT WORKS
             </div>
-            <h2 className="font-serif-editorial text-3xl sm:text-5xl font-normal text-white">
+            <h2 className="font-display text-3xl sm:text-5xl font-bold text-white tracking-tight">
               How a rollout actually works.
             </h2>
             <p className="text-sm sm:text-base text-[#94A3B8] font-light">
@@ -900,21 +918,21 @@ export default function Landing() {
             {STEPS.map((step, idx) => (
               <div
                 key={step.num}
-                className="relative bg-[#0B131E] border border-[#1E293B] rounded-2xl p-8 hover:border-[#3B82F6]/50 transition-all duration-300 flex flex-col justify-between"
+                className="relative bg-[#0A1224]/85 backdrop-blur-md border border-[#162544] rounded-2xl p-8 hover:border-[#0080FF]/60 transition-all duration-300 flex flex-col justify-between"
               >
                 <div>
-                  <div className="text-5xl font-black text-[#1E293B] mb-6 font-mono">
+                  <div className="text-5xl font-black text-[#162544] mb-6 font-mono">
                     {step.num}
                   </div>
                   <h3 className="text-lg font-bold text-white mb-2">{step.title}</h3>
-                  <div className="text-xs font-semibold text-[#18A9D9] mb-4">{step.subtitle}</div>
+                  <div className="text-xs font-semibold text-[#57c8ff] mb-4">{step.subtitle}</div>
                   <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed font-light">
                     {step.description}
                   </p>
                 </div>
-                <div className="mt-8 pt-4 border-t border-[#1E293B] flex items-center justify-between text-[11px] font-bold text-[#64748B]">
+                <div className="mt-8 pt-4 border-t border-[#162544] flex items-center justify-between text-[11px] font-bold text-[#64748B]">
                   <span>Step {idx + 1} of 3</span>
-                  <span className="text-[#83C248]">Verified Flow</span>
+                  <span className="text-[#00D4FF]">Verified Flow</span>
                 </div>
               </div>
             ))}
@@ -922,14 +940,14 @@ export default function Landing() {
         </section>
 
         {/* ──────── BUILT FOR HOW CONTRACTORS ACTUALLY WORK: 3-SURFACE CARDS ──────── */}
-        <section className="py-24 px-6 bg-[#080E1E] border-y border-[#1E293B]/80">
+        <section className="py-24 px-6 bg-[#05060c]/60 backdrop-blur-md border-y border-[#162544]">
           <div className="max-w-7xl mx-auto">
             
             <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-              <div className="text-xs font-extrabold uppercase tracking-[0.25em] text-[#18A9D9]">
+              <div className="text-xs font-extrabold uppercase tracking-[0.25em] text-[#57c8ff]">
                 ACROSS THE BUYER JOURNEY
               </div>
-              <h2 className="font-serif-editorial text-3xl sm:text-5xl font-normal text-white">
+              <h2 className="font-display text-3xl sm:text-5xl font-bold text-white tracking-tight">
                 One platform, three powerful surfaces.
               </h2>
             </div>
@@ -937,52 +955,52 @@ export default function Landing() {
             <div className="grid md:grid-cols-3 gap-6">
               
               {/* Card 1: Website */}
-              <div className="arc-frame rounded-2xl p-6 flex flex-col justify-between bg-[#0B131E] border border-[#1E293B]">
+              <div className="arc-frame rounded-2xl p-6 flex flex-col justify-between bg-[#0A1224]/85 backdrop-blur-md border border-[#162544]">
                 <div className="space-y-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#3B82F6]/15 border border-[#3B82F6]/30 flex items-center justify-center text-[#3B82F6]">
+                  <div className="w-10 h-10 rounded-xl bg-[#0080FF]/15 border border-[#0080FF]/30 flex items-center justify-center text-[#0080FF]">
                     <Smartphone className="w-5 h-5" />
                   </div>
-                  <div className="text-[10px] font-extrabold uppercase tracking-widest text-[#18A9D9]">SURFACE 01</div>
+                  <div className="text-[10px] font-extrabold uppercase tracking-widest text-[#57c8ff]">SURFACE 01</div>
                   <h3 className="text-xl font-bold text-white">On Your Website</h3>
                   <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed">
                     Embed the visualizer directly into your home remodeling website. Visitors explore color combinations 24/7 and submit quotes with pre-selected CertainTeed product specs.
                   </p>
                 </div>
-                <div className="mt-8 pt-4 border-t border-[#1E293B] text-xs font-bold text-[#83C248]">
+                <div className="mt-8 pt-4 border-t border-[#162544] text-xs font-bold text-[#00D4FF]">
                   Captures warm inbound leads
                 </div>
               </div>
 
               {/* Card 2: Kitchen Table */}
-              <div className="arc-frame rounded-2xl p-6 flex flex-col justify-between bg-[#0B131E] border border-[#3B82F6]/50 shadow-[0_0_30px_rgba(59,130,246,0.15)]">
+              <div className="arc-frame rounded-2xl p-6 flex flex-col justify-between bg-[#0A1224]/90 backdrop-blur-md border border-[#0080FF]/60 shadow-[0_0_30px_rgba(0,128,255,0.2)]">
                 <div className="space-y-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#83C248]/15 border border-[#83C248]/30 flex items-center justify-center text-[#83C248]">
+                  <div className="w-10 h-10 rounded-xl bg-[#00D4FF]/15 border border-[#00D4FF]/30 flex items-center justify-center text-[#00D4FF]">
                     <Sparkles className="w-5 h-5" />
                   </div>
-                  <div className="text-[10px] font-extrabold uppercase tracking-widest text-[#83C248]">SURFACE 02</div>
+                  <div className="text-[10px] font-extrabold uppercase tracking-widest text-[#00D4FF]">SURFACE 02</div>
                   <h3 className="text-xl font-bold text-white">At the Kitchen Table</h3>
                   <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed">
                     Your sales reps hand an iPad to the homeowner. Together, you slide between the current roof and a brand-new Landmark PRO Moire Black roof, locking in emotional buy-in.
                   </p>
                 </div>
-                <div className="mt-8 pt-4 border-t border-[#1E293B] text-xs font-bold text-white">
+                <div className="mt-8 pt-4 border-t border-[#162544] text-xs font-bold text-white">
                   Closes deals on the first visit
                 </div>
               </div>
 
               {/* Card 3: Field Takeoff */}
-              <div className="arc-frame rounded-2xl p-6 flex flex-col justify-between bg-[#0B131E] border border-[#1E293B]">
+              <div className="arc-frame rounded-2xl p-6 flex flex-col justify-between bg-[#0A1224]/85 backdrop-blur-md border border-[#162544]">
                 <div className="space-y-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#18A9D9]/15 border border-[#18A9D9]/30 flex items-center justify-center text-[#18A9D9]">
+                  <div className="w-10 h-10 rounded-xl bg-[#18A9D9]/15 border border-[#18A9D9]/30 flex items-center justify-center text-[#57c8ff]">
                     <Calculator className="w-5 h-5" />
                   </div>
-                  <div className="text-[10px] font-extrabold uppercase tracking-widest text-[#18A9D9]">SURFACE 03</div>
+                  <div className="text-[10px] font-extrabold uppercase tracking-widest text-[#57c8ff]">SURFACE 03</div>
                   <h3 className="text-xl font-bold text-white">In the Field</h3>
                   <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed">
                     Production managers and estimators record exact wall measurements, subtract window openings, calculate roof squares, and generate clean material takeoff lists on site.
                   </p>
                 </div>
-                <div className="mt-8 pt-4 border-t border-[#1E293B] text-xs font-bold text-[#18A9D9]">
+                <div className="mt-8 pt-4 border-t border-[#162544] text-xs font-bold text-[#57c8ff]">
                   Eliminates estimation mistakes
                 </div>
               </div>
@@ -995,10 +1013,10 @@ export default function Landing() {
         {/* ──────── PRICING SECTION (PRESERVES STRIPE CHECKOUT) ──────── */}
         <section className="py-24 px-6 max-w-7xl mx-auto" id="pricing">
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-            <div className="text-xs font-extrabold uppercase tracking-[0.25em] text-[#18A9D9]">
+            <div className="text-xs font-extrabold uppercase tracking-[0.25em] text-[#57c8ff]">
               TRANSPARENT PRICING
             </div>
-            <h2 className="font-serif-editorial text-3xl sm:text-5xl font-normal text-white">
+            <h2 className="font-display text-3xl sm:text-5xl font-bold text-white tracking-tight">
               Simple, transparent contractor pricing.
             </h2>
             <p className="text-sm sm:text-base text-[#94A3B8] font-light">
@@ -1012,12 +1030,12 @@ export default function Landing() {
                 key={plan.key}
                 className={`rounded-2xl p-8 flex flex-col justify-between transition-all duration-300 relative ${
                   plan.popular
-                    ? 'bg-[#0F172A] border-2 border-[#3B82F6] shadow-[0_0_40px_rgba(59,130,246,0.22)]'
-                    : 'bg-[#0B131E] border border-[#1E293B] hover:border-[#334155]'
+                    ? 'bg-[#0A1224]/90 backdrop-blur-md border-2 border-[#0080FF] shadow-[0_0_40px_rgba(0,128,255,0.25)]'
+                    : 'bg-[#0A1224]/80 backdrop-blur-md border border-[#162544] hover:border-[#0080FF]/40'
                 }`}
               >
                 {plan.popular && (
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#3B82F6] text-white text-[10px] font-extrabold uppercase tracking-widest px-4 py-1 rounded-full shadow-lg">
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[#0080FF] to-[#00D4FF] text-[#05060c] text-[10px] font-extrabold uppercase tracking-widest px-4 py-1 rounded-full shadow-lg">
                     Most Popular with Contractors
                   </div>
                 )}
@@ -1028,7 +1046,7 @@ export default function Landing() {
                     <p className="text-xs text-[#94A3B8] leading-relaxed">{plan.description}</p>
                   </div>
 
-                  <div className="mb-8 pb-6 border-b border-[#1E293B]">
+                  <div className="mb-8 pb-6 border-b border-[#162544]">
                     {plan.price !== null ? (
                       <div className="flex items-baseline gap-1.5">
                         <span className="text-5xl font-black text-white">${plan.price}</span>
@@ -1042,7 +1060,7 @@ export default function Landing() {
                   <ul className="space-y-3.5 mb-8 text-xs sm:text-sm text-[#E2E8F0]">
                     {plan.features.map((feat) => (
                       <li key={feat} className="flex items-start gap-2.5">
-                        <Check className="w-4 h-4 text-[#83C248] shrink-0 mt-0.5" />
+                        <Check className="w-4 h-4 text-[#00D4FF] shrink-0 mt-0.5" />
                         <span>{feat}</span>
                       </li>
                     ))}
@@ -1054,8 +1072,8 @@ export default function Landing() {
                   disabled={checkoutLoading !== null}
                   className={`w-full py-4 rounded-xl text-xs font-extrabold uppercase tracking-wider transition-all cursor-pointer flex items-center justify-center gap-2 ${
                     plan.popular
-                      ? 'bg-[#83C248] hover:bg-[#93D553] text-[#060B18] shadow-[0_0_24px_rgba(131,194,72,0.4)] active:scale-95'
-                      : 'bg-[#1E293B] hover:bg-[#334155] text-white border border-[#334155]'
+                      ? 'bg-gradient-to-r from-[#0080FF] to-[#00D4FF] hover:brightness-110 text-[#05060c] shadow-[0_0_24px_rgba(0,128,255,0.45)] active:scale-95'
+                      : 'bg-[#0D182F] hover:bg-[#132240] text-white border border-[#162544]'
                   } ${checkoutLoading ? 'opacity-60 cursor-wait' : ''}`}
                 >
                   {checkoutLoading === plan.key ? 'Connecting to Stripe...' : plan.cta}
@@ -1067,13 +1085,13 @@ export default function Landing() {
         </section>
 
         {/* ──────── FAQ ACCORDION ──────── */}
-        <section className="py-24 px-6 bg-[#080E1E] border-t border-[#1E293B]/80" id="faq">
+        <section className="py-24 px-6 bg-[#05060c]/60 backdrop-blur-md border-t border-[#162544]" id="faq">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-16 space-y-3">
-              <div className="text-xs font-extrabold uppercase tracking-[0.25em] text-[#18A9D9]">
+              <div className="text-xs font-extrabold uppercase tracking-[0.25em] text-[#57c8ff]">
                 FREQUENTLY ASKED QUESTIONS
               </div>
-              <h2 className="font-serif-editorial text-3xl sm:text-5xl font-normal text-white">
+              <h2 className="font-display text-3xl sm:text-5xl font-bold text-white tracking-tight">
                 Everything you need to know.
               </h2>
             </div>
@@ -1084,17 +1102,17 @@ export default function Landing() {
                 return (
                   <div
                     key={idx}
-                    className="bg-[#0B131E] border border-[#1E293B] rounded-2xl overflow-hidden transition-colors"
+                    className="bg-[#0A1224]/85 backdrop-blur-md border border-[#162544] rounded-2xl overflow-hidden transition-colors"
                   >
                     <button
                       onClick={() => setOpenFaq(isOpen ? null : idx)}
-                      className="w-full px-6 py-5 flex items-center justify-between text-left cursor-pointer hover:bg-[#131F2E]/40"
+                      className="w-full px-6 py-5 flex items-center justify-between text-left cursor-pointer hover:bg-[#0D182F]/60"
                     >
                       <span className="text-sm sm:text-base font-bold text-white pr-4">{faq.q}</span>
-                      <ChevronRight className={`w-4 h-4 text-[#18A9D9] shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-90' : ''}`} />
+                      <ChevronRight className={`w-4 h-4 text-[#57c8ff] shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-90' : ''}`} />
                     </button>
                     {isOpen && (
-                      <div className="px-6 pb-6 pt-1 border-t border-[#1E293B]/60">
+                      <div className="px-6 pb-6 pt-1 border-t border-[#162544]">
                         <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed font-light">{faq.a}</p>
                       </div>
                     )}
@@ -1105,14 +1123,14 @@ export default function Landing() {
           </div>
         </section>
 
-        {/* ──────── BOTTOM HERO BANNER / TABLET SHOWCASE (ARCWAY STYLE) ──────── */}
+        {/* ──────── BOTTOM HERO BANNER / TABLET SHOWCASE ──────── */}
         <section className="py-24 px-6 max-w-7xl mx-auto">
-          <div className="arc-frame rounded-3xl p-8 sm:p-14 bg-gradient-to-br from-[#0F172A] via-[#0B131E] to-[#060B18] border border-[#3B82F6]/40 relative overflow-hidden shadow-2xl">
+          <div className="arc-frame rounded-3xl p-8 sm:p-14 bg-gradient-to-br from-[#0A1224]/95 via-[#070E1D]/90 to-[#05060c]/95 backdrop-blur-xl border border-[#0080FF]/40 relative overflow-hidden shadow-2xl">
             <div className="max-w-2xl space-y-6 relative z-10">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#18A9D9]/15 border border-[#18A9D9]/30 text-[#18A9D9] text-xs font-extrabold uppercase tracking-widest">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#0080FF]/15 border border-[#0080FF]/35 text-[#57c8ff] text-xs font-extrabold uppercase tracking-widest">
                 NO DELAYS · NO SWATCH GUESSWORK
               </div>
-              <h2 className="font-serif-editorial text-3xl sm:text-5xl md:text-6xl font-normal text-white leading-tight">
+              <h2 className="font-display text-3xl sm:text-5xl md:text-6xl font-bold text-white leading-tight tracking-tight">
                 See your manufacturer catalog live in minutes.
               </h2>
               <p className="text-sm sm:text-base text-[#94A3B8] leading-relaxed font-light">
@@ -1121,14 +1139,14 @@ export default function Landing() {
               <div className="pt-4 flex flex-col sm:flex-row items-center gap-4">
                 <button
                   onClick={() => navigate('/app')}
-                  className="w-full sm:w-auto px-8 py-4 rounded-xl bg-[#83C248] hover:bg-[#93D553] text-[#060B18] font-extrabold text-xs uppercase tracking-wider transition-all shadow-[0_0_24px_rgba(131,194,72,0.4)] flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+                  className="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-[#0080FF] to-[#00D4FF] hover:brightness-110 text-[#05060c] font-extrabold text-xs uppercase tracking-wider transition-all shadow-[0_0_24px_rgba(0,128,255,0.45)] flex items-center justify-center gap-2 cursor-pointer active:scale-95"
                 >
                   <span>Launch Studio Visualizer</span>
-                  <ArrowRight className="w-4 h-4 text-[#060B18]" />
+                  <ArrowRight className="w-4 h-4 text-[#05060c]" />
                 </button>
                 <button
                   onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="w-full sm:w-auto px-6 py-4 rounded-xl bg-[#131F2E] hover:bg-[#1A2838] text-white border border-[#223448] font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full sm:w-auto px-6 py-4 rounded-xl bg-[#0A1224] hover:bg-[#132240] text-white border border-[#162544] font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <span>View Contractor Plans</span>
                 </button>
@@ -1136,7 +1154,7 @@ export default function Landing() {
             </div>
 
             {/* Background Architectural Watermark */}
-            <div className="absolute right-[-4%] bottom-[-15%] font-serif-editorial text-[140px] sm:text-[220px] font-normal text-white/[0.03] select-none pointer-events-none tracking-tighter">
+            <div className="absolute right-[-4%] bottom-[-15%] font-display text-[140px] sm:text-[220px] font-bold text-white/[0.03] select-none pointer-events-none tracking-tighter">
               BLUEPRINT
             </div>
           </div>
@@ -1145,40 +1163,56 @@ export default function Landing() {
       </main>
 
       {/* ──────── ARCHITECTURAL MINIMALIST FOOTER ──────── */}
-      <footer className="border-t border-[#1E293B] bg-[#060B18] py-14 px-6 relative">
+      <footer className="border-t border-[#162544]/80 bg-[#05060c]/85 backdrop-blur-xl py-16 px-6 relative">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
             
             <div className="md:col-span-2 space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#3B82F6] to-[#18A9D9] flex items-center justify-center shadow-[0_0_12px_rgba(59,130,246,0.4)]">
-                  <Layers className="w-4 h-4 text-white" />
+              <div className="flex items-center gap-3.5">
+                <img
+                  src="/bp-new-logo.jpg"
+                  alt="Blueprint AI Consulting Co."
+                  className="w-10 h-10 rounded-full object-cover ring-2 ring-[#0080FF]/50 galactic-glow"
+                />
+                <div className="flex flex-col">
+                  <span className="font-display font-bold text-lg tracking-tight text-white leading-none">
+                    BLUEPRINT<span className="text-[#00D4FF] ml-1">ENVISION</span>
+                  </span>
+                  <span className="text-[9px] font-mono text-[#57c8ff] uppercase tracking-[0.22em] mt-1">
+                    Exterior Visualization Studio
+                  </span>
                 </div>
-                <span className="font-extrabold text-base tracking-tight text-white">
-                  BLUEPRINT<span className="text-[#3B82F6]">ENVISION</span>
-                </span>
               </div>
-              <p className="text-xs text-[#64748B] leading-relaxed max-w-sm">
+              <p className="text-xs text-[#94A3B8] leading-relaxed max-w-sm font-sans">
                 Next-generation exterior visualization platform for professional roofing, siding, and remodeling contractors. Powered by Gemini AI.
               </p>
-              <div className="text-[11px] text-[#475569]">
-                Blueprint AI Consulting Co. · All rights reserved.
+              <div className="text-[11px] font-mono text-[#64748B] flex items-center gap-2">
+                <span>A</span>
+                <a
+                  href="https://blueprintaiconsultingco.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-[#00D4FF] hover:underline"
+                >
+                  Blueprint AI Consulting Co.
+                </a>
+                <span>Flagship Product · York, PA</span>
               </div>
             </div>
 
-            <div className="space-y-3">
-              <h4 className="text-xs font-bold uppercase tracking-widest text-white">Platform</h4>
-              <ul className="space-y-2 text-xs text-[#94A3B8]">
+            <div className="space-y-3 font-mono text-xs">
+              <h4 className="font-display font-bold uppercase tracking-widest text-white text-xs">Platform</h4>
+              <ul className="space-y-2 text-[#94A3B8]">
                 <li><a href="#platform" className="hover:text-white transition-colors">Studio Visualizer</a></li>
                 <li><a href="#capabilities" className="hover:text-white transition-colors">4-Side Field Takeoff</a></li>
-                <li><a href="#capabilities" className="hover:text-white transition-colors">Street View Engine</a></li>
                 <li><a href="#pricing" className="hover:text-white transition-colors">Pricing & Plans</a></li>
+                <li><a href="https://blueprintdispatch.app" target="_blank" rel="noreferrer" className="text-[#00D4FF] hover:underline">BlueprintDispatch Voice AI →</a></li>
               </ul>
             </div>
 
-            <div className="space-y-3">
-              <h4 className="text-xs font-bold uppercase tracking-widest text-white">Legal & Specs</h4>
-              <ul className="space-y-2 text-xs text-[#64748B]">
+            <div className="space-y-3 font-mono text-xs">
+              <h4 className="font-display font-bold uppercase tracking-widest text-white text-xs">Legal & Specs</h4>
+              <ul className="space-y-2 text-[#64748B]">
                 <li>CertainTeed® Landmark® Series</li>
                 <li>Monogram® Siding Collection</li>
                 <li><a href="mailto:drewhufnagle@gmail.com" className="hover:text-[#94A3B8] transition-colors">Enterprise White-Label Inquiry</a></li>
@@ -1188,8 +1222,8 @@ export default function Landing() {
 
           </div>
 
-          <div className="border-t border-[#1E293B] pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-[#475569]">
-            <p>© {new Date().getFullYear()} BlueprintEnvision. Built for exterior contractors.</p>
+          <div className="border-t border-[#162544] pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] font-mono text-[#64748B]">
+            <p>© {new Date().getFullYear()} Blueprint AI Consulting Co. All rights reserved.</p>
             <p>CertainTeed® is a registered trademark of CertainTeed LLC. Independent visualization software.</p>
           </div>
         </div>
