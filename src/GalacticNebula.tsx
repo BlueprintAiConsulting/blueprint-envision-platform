@@ -64,13 +64,13 @@ export default function GalacticNebula() {
     const U = (n: string) => gl.getUniformLocation(prog, n);
     const uTime = U('uTime');
     const uRes = U('uRes');
-    // Exact colors from blueprintaiconsultingco.com IMMERSIVE palette
-    gl.uniform3fv(U('uA'), hexToVec('#030b1e')); // Deep cosmos navy
+    // Exact colors from blueprintaiconsultingco.com LiveTexture + IMMERSIVE palette
+    gl.uniform3fv(U('uA'), hexToVec('#04163a')); // Deep galactic cosmos blue
     gl.uniform3fv(U('uB'), hexToVec('#007fff')); // Blueprint electric blue
     gl.uniform3fv(U('uC'), hexToVec('#0a4fd0')); // Deep royal nebula
-    gl.uniform3fv(U('uD'), hexToVec('#57c8ff')); // Bright cyan highlight
+    gl.uniform3fv(U('uD'), hexToVec('#57c8ff')); // Luminous cyan highlight
     gl.uniform1f(U('uSeed'), 3.7);
-    gl.uniform1f(U('uInt'), 0.85);
+    gl.uniform1f(U('uInt'), 0.92);
 
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 1.25);
@@ -191,21 +191,21 @@ export default function GalacticNebula() {
   }, []);
 
   return (
-    <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden bg-[#05060c]" aria-hidden>
+    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-[#05060c]" aria-hidden>
       {/* Procedural WebGL Galactic Fluid Nebula */}
       <canvas
         ref={webglCanvasRef}
-        className="absolute inset-0 w-full h-full object-cover opacity-85"
+        className="absolute inset-0 w-full h-full object-cover opacity-100"
       />
 
       {/* Twinkling Starfield Particles */}
       <canvas
         ref={starsCanvasRef}
-        className="absolute inset-0 w-full h-full"
+        className="absolute inset-0 w-full h-full opacity-95"
       />
 
       {/* Blueprint Drafting Grid Overlay */}
-      <div className="absolute inset-0 blueprint-grid opacity-30" />
+      <div className="absolute inset-0 blueprint-grid opacity-20" />
 
       {/* Scanlines & Vignette */}
       <div className="absolute inset-0 immersive-scanlines" />

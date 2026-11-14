@@ -2001,7 +2001,7 @@ export default function App() {
 
             {/* Image optimization feedback badge */}
             {imageOptimizeInfo && (
-              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[#10B981]/10 border border-[#10B981]/30 rounded-lg text-[10px] text-[#34D399] font-medium mt-1 animate-pulse-once">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[#007fff]/15 border border-[#57c8ff]/35 rounded-lg text-[10px] text-[#8fd9ff] font-medium mt-1 animate-pulse-once">
                 <svg className="w-3 h-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
                 {imageOptimizeInfo}
               </div>
@@ -2371,7 +2371,7 @@ export default function App() {
                         <div className="w-full bg-[#1E293B] rounded-full h-1 overflow-hidden"><div className="h-full bg-gradient-to-r from-[#3B82F6] to-[#60A5FA] rounded-full animate-pulse" style={{ width: '60%' }} /></div>
                       </div>
                     ) : detectionProgress.startsWith('✓') ? (
-                      <div className="flex items-center gap-2 bg-[#064E3B]/30 border border-[#10B981]/30 rounded-lg px-3 py-2"><Check className="w-3.5 h-3.5 text-[#10B981] shrink-0" /><span className="text-[10px] text-[#6EE7B7] font-medium">{detectionProgress}</span></div>
+                      <div className="flex items-center gap-2 bg-[#04163a]/60 border border-[#57c8ff]/35 rounded-lg px-3 py-2"><Check className="w-3.5 h-3.5 text-[#57c8ff] shrink-0" /><span className="text-[10px] text-[#8fd9ff] font-medium">{detectionProgress}</span></div>
                     ) : (
                       <div className="space-y-2">
                         <p className="text-[10px] text-[#64748B] leading-relaxed">Analyzes the house photo to identify <span className="text-[#94A3B8] font-medium">distinct siding zones</span> — main body, gable ends, garage bays — and generates precise masks for each, ready to color individually.</p>
@@ -2627,7 +2627,7 @@ export default function App() {
               <div className="bg-[#0F172A] border-b border-[#1E293B] px-4 py-3 flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
+                    <div className="w-2 h-2 rounded-full bg-[#57c8ff] animate-pulse shadow-[0_0_8px_rgba(87,200,255,0.7)]" />
                     <span className="text-[10px] font-bold text-[#94A3B8] uppercase tracking-widest">Engine Active</span>
                   </div>
                   <div className="h-4 w-[1px] bg-[#334155]" />
@@ -3100,7 +3100,7 @@ export default function App() {
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-[8px] font-bold text-[#64748B] uppercase tracking-widest">System Status:</span>
-                  <span className="text-[10px] font-bold text-[#10B981] uppercase">Operational</span>
+                  <span className="text-[10px] font-bold text-[#57c8ff] uppercase">Operational</span>
                 </div>
               </div>
             </div>
@@ -3109,17 +3109,17 @@ export default function App() {
       </main>
 
       {/* Technical Specs Footer */}
-      <footer className="bg-[#0F172A] border-t border-[#1E293B] text-white py-16 mt-20">
+      <footer className="bg-[#05060c] border-t border-[#162544] text-white py-16 mt-20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid md:grid-cols-4 gap-12">
             <div className="col-span-full">
               <div className="flex items-center gap-3 mb-6">
-                <div className="bg-[#3B82F6] p-2 rounded-md">
-                  <Layout className="text-white w-5 h-5" />
+                <div className="w-10 h-10 rounded-full overflow-hidden border border-[#007fff]/50 shadow-[0_0_16px_rgba(0,127,255,0.45)] shrink-0">
+                  <img src={assetPath("/bp-new-logo.jpg")} alt="Blueprint AI Consulting Co." className="w-full h-full object-cover" />
                 </div>
                 <div>
-                  <h2 className="font-bold text-xl tracking-tight">BLUEPRINT<span className="text-[#3B82F6]">ENVISION</span></h2>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-[#475569] mt-0.5">Powered by Blueprint AI</p>
+                  <h2 className="font-display font-bold text-xl tracking-tight">BLUEPRINT<span className="text-[#57c8ff]">ENVISION</span></h2>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-[#8fd9ff]/70 mt-0.5">Powered by Blueprint AI Consulting Co.</p>
                 </div>
               </div>
               <p className="text-[#94A3B8] text-sm leading-relaxed max-w-md">
@@ -3291,9 +3291,9 @@ export default function App() {
                   >
                     <motion.div
                       initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 300, delay: 0.1 }}
-                      className="w-20 h-20 rounded-full bg-[#10B981]/20 border border-[#10B981]/40 flex items-center justify-center mb-6"
+                      className="w-20 h-20 rounded-full bg-[#007fff]/20 border border-[#57c8ff]/45 flex items-center justify-center mb-6"
                     >
-                      <Check className="w-10 h-10 text-[#10B981]" />
+                      <Check className="w-10 h-10 text-[#57c8ff]" />
                     </motion.div>
                     <h3 className="text-xl font-bold text-[#E2E8F0] mb-3">Request Sent!</h3>
                     <p className="text-[#94A3B8] text-sm leading-relaxed mb-2">The {TENANT.installerName} team has your request and will reach out within <strong className="text-white">24 business hours</strong>.</p>
